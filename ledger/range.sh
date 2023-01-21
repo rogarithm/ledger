@@ -10,6 +10,21 @@ if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
 	touch ${TMP_DIR}/${TMP_FILE}
 fi
 
+START_DATE='01.01'
+END_DATE='01.04'
+DATES_FILE='dates'
+dates () {
+	if [ ! -d ${TMP_DIR}/${DATES_FILE} ]; then
+		touch ${TMP_DIR}/${DATES_FILE}
+	fi
+
+	echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
+
+	while [ "${START_DATE}" != "${END_DATE}" ]; do
+		echo "START: " ${START_DATE}
+		START_DATE=$(date -j -f '%m.%d' -v+1d ${START_DATE} +%m.%d)
+		echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
+	done
 }
 
 range () {
@@ -21,3 +36,5 @@ range ${DAY} | cat
 echo
 range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE}
 (cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc
+echo
+dates
