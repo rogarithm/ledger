@@ -25,6 +25,10 @@ dates () {
 		START_DATE=$(date -j -f '%m.%d' -v+1d ${START_DATE} +%m.%d)
 		echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
 	done
+
+	while read DATE; do
+		echo "${DATE}"
+	done < ${TMP_DIR}/${DATES_FILE}
 }
 
 range () {
