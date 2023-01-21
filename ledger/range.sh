@@ -21,5 +21,3 @@ range ${DAY} | cat
 echo
 range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE}
 (cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc
-
-#cat ${TMP_DIR}/${TMP_FILE}
