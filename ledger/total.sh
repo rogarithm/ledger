@@ -5,7 +5,9 @@ SOURCE_FILE='2023-01.txt'
 TMP_DIR='tmp'
 TMP_FILE='total'
 
-touch ${TMP_DIR}/${TMP_FILE}
+if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
+	touch ${TMP_DIR}/${TMP_FILE}
+fi
 
 gsed -e '1d' ${SOURCE_DIR}/${SOURCE_FILE} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | cut -f3 > ${TMP_DIR}/${TMP_FILE}
 
