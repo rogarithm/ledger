@@ -10,18 +10,16 @@ if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
 	touch ${TMP_DIR}/${TMP_FILE}
 fi
 
-range () {
-	gsed -e '1d' ${SOURCE_DIR}/${SOURCE_FILE} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE}
 }
 
-printRange () {
-	gsed -e '1d' ${SOURCE_DIR}/${SOURCE_FILE} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e ${DAY} | cat
+range () {
+	gsed -e '1d' ${SOURCE_DIR}/${SOURCE_FILE} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e ${DAY}
 }
 
 clear
-printRange ${DAY}
+range ${DAY} | cat
 echo
-range ${DAY}
+range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE}
 (cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc
 
 #cat ${TMP_DIR}/${TMP_FILE}
