@@ -1,6 +1,0 @@
-#!/bin/bash
-setalarm() {
-	sleep $(echo "$1 * 60" | bc)
-	say "it's the end"
-}
-setalarm $1
