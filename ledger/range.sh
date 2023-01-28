@@ -35,6 +35,9 @@ range () {
 	gsed -e '1d' ${SOURCE_DIR}/${SOURCE_FILE} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e $1
 }
 
+_print_empty_line () {
+	echo
+}
 clear
 range ${DAY} | cat
 echo
