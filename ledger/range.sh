@@ -38,14 +38,16 @@ range () {
 _print_empty_line () {
 	echo
 }
+
+# 테스트
 clear
-range ${DAY} | cat
-echo
-range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE}
-(cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc
-echo
-dates
-echo
-while read DATE; do
+range ${DAY} | cat # 특정일의 지출 내역 전체를 출력
+_print_empty_line
+range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE} # 특정일의 지출 금액만 임시 파일에 저장
+(cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc # 특정일의 지출 금액 총합 계산
+_print_empty_line
+dates # 시작일과 종료일 사이(inclusive) 날짜를 임시 파일에 저장
+_print_empty_line
+while read DATE; do # 임시 파일에 저장된 날짜 모두에 대해 지출 내역 전체를 출력
 	range ${DATE} | cat
 done < ${TMP_DIR}/${DATES_FILE}
