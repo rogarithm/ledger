@@ -15,6 +15,7 @@ DATES_FILE='dates'
 _extract_dates_in_range () {
 	if [ ! -d ${TMP_DIR}/${DATES_FILE} ]; then
 		touch ${TMP_DIR}/${DATES_FILE}
+		echo "" > ${TMP_DIR}/${DATES_FILE}
 	fi
 
 	echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
@@ -56,5 +57,7 @@ _print_empty_line
 echo "기간 내 지출 내역 추출 테스트"
 echo "임시 파일에 저장된 날짜 모두에 대해 지출 내역 전체를 출력"
 while read DATE; do
-	range ${DATE} | cat
+	if [ ${DATE} ]; then
+		range ${DATE} | cat
+	fi
 done < ${TMP_DIR}/${DATES_FILE}
