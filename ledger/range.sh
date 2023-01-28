@@ -13,7 +13,7 @@ fi
 START_DATE='01.01'
 END_DATE='01.04'
 DATES_FILE='dates'
-dates () {
+_extract_dates_in_range () {
 	if [ ! -d ${TMP_DIR}/${DATES_FILE} ]; then
 		touch ${TMP_DIR}/${DATES_FILE}
 	fi
@@ -46,7 +46,7 @@ _print_empty_line
 range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE} # 특정일의 지출 금액만 임시 파일에 저장
 (cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc # 특정일의 지출 금액 총합 계산
 _print_empty_line
-dates # 시작일과 종료일 사이(inclusive) 날짜를 임시 파일에 저장
+_extract_dates_in_range # 시작일과 종료일 사이(inclusive) 날짜를 임시 파일에 저장
 _print_empty_line
 while read DATE; do # 임시 파일에 저장된 날짜 모두에 대해 지출 내역 전체를 출력
 	range ${DATE} | cat
