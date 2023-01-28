@@ -21,7 +21,6 @@ _extract_dates_in_range () {
 	echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
 
 	while [ "${START_DATE}" != "${END_DATE}" ]; do
-		echo "START: " ${START_DATE}
 		START_DATE=$(date -j -f '%m.%d' -v+1d ${START_DATE} +%m.%d)
 		echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
 	done
