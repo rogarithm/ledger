@@ -4,7 +4,6 @@ SOURCE_DIR='/Users/sehun/personal/ledger'
 SOURCE_FILE='2023-01.txt'
 TMP_DIR='tmp'
 TMP_FILE='range'
-DAY=$1
 
 if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
 	touch ${TMP_DIR}/${TMP_FILE}
@@ -41,13 +40,21 @@ _print_empty_line () {
 
 # 테스트
 clear
-range ${DAY} | cat # 특정일의 지출 내역 전체를 출력
+echo "특정일의 총 지출액 계산 테스트"
+DAY='01.01'
+echo "특정일의 지출 내역 전체를 출력"
+range ${DAY} | cat
+echo "특정일의 지출 금액만 임시 파일에 저장"
+range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE}
+echo "특정일의 지출 금액 총합 계산"
+(cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc
 _print_empty_line
-range ${DAY} | cut -f3 > ${TMP_DIR}/${TMP_FILE} # 특정일의 지출 금액만 임시 파일에 저장
-(cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc # 특정일의 지출 금액 총합 계산
+echo "기간 내 날짜 목록 추출 테스트"
+echo "시작일과 종료일 사이(inclusive) 날짜를 임시 파일에 저장"
+_extract_dates_in_range
 _print_empty_line
-_extract_dates_in_range # 시작일과 종료일 사이(inclusive) 날짜를 임시 파일에 저장
-_print_empty_line
-while read DATE; do # 임시 파일에 저장된 날짜 모두에 대해 지출 내역 전체를 출력
+echo "기간 내 지출 내역 추출 테스트"
+echo "임시 파일에 저장된 날짜 모두에 대해 지출 내역 전체를 출력"
+while read DATE; do
 	range ${DATE} | cat
 done < ${TMP_DIR}/${DATES_FILE}
