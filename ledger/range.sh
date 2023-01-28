@@ -9,8 +9,8 @@ if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
 	touch ${TMP_DIR}/${TMP_FILE}
 fi
 
-START_DATE='01.01'
-END_DATE='01.04'
+START_DATE=$1
+END_DATE=$2
 DATES_FILE='dates'
 _extract_dates_in_range () {
 	if [ ! -d ${TMP_DIR}/${DATES_FILE} ]; then
