@@ -30,12 +30,6 @@ _extract_payments_of_day () {
 	gsed -e '1d' ${source_dir}/${source_file} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e $1
 }
 
-_print_empty_line () {
-	echo
-}
-
-
-
 compute_total_amounts_in_range () {
 	_extract_dates_in_range $1 $2
 
