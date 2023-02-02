@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-SOURCE_DIR='/Users/sehun/personal/ledger'
-SOURCE_FILE='2023-01.txt'
 TMP_DIR='/tmp'
 TMP_FILE='range'
 
@@ -27,7 +25,9 @@ _extract_dates_in_range () {
 }
 
 _extract_payments_of_day () {
-	gsed -e '1d' ${SOURCE_DIR}/${SOURCE_FILE} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e $1
+	local source_dir='/Users/sehun/personal/ledger'
+	local source_file='2023-01.txt'
+	gsed -e '1d' ${source_dir}/${source_file} | gsed -e '/^$/d' | gsed 's/ | /\t/g' | grep -e $1
 }
 
 _print_empty_line () {
