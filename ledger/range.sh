@@ -2,7 +2,7 @@
 
 SOURCE_DIR='/Users/sehun/personal/ledger'
 SOURCE_FILE='2023-01.txt'
-TMP_DIR='tmp'
+TMP_DIR='/tmp'
 TMP_FILE='range'
 
 if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
