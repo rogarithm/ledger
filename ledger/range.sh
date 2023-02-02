@@ -1,11 +1,6 @@
 #!/usr/bin/env bash
 
 TMP_DIR='/tmp'
-TMP_FILE='range'
-
-if [ ! -d ${TMP_DIR}/${TMP_FILE} ]; then
-	touch ${TMP_DIR}/${TMP_FILE}
-fi
 
 START_DATE=$1
 END_DATE=$2
@@ -31,17 +26,23 @@ _extract_payments_of_day () {
 }
 
 compute_total_amounts_in_range () {
+	local tmp_file='payments_in_range'
+
+	if [ ! -d ${TMP_DIR}/${tmp_file} ]; then
+		touch ${TMP_DIR}/${tmp_file}
+	fi
+
 	_extract_dates_in_range $1 $2
 
-	cat /dev/null > ${TMP_DIR}/${TMP_FILE}
+	cat /dev/null > ${TMP_DIR}/${tmp_file}
 
 	while read DATE; do
 		if [ ${DATE} ]; then
-			_extract_payments_of_day ${DATE} | cut -f3 >> ${TMP_DIR}/${TMP_FILE}
+			_extract_payments_of_day ${DATE} | cut -f3 >> ${TMP_DIR}/${tmp_file}
 		fi
 	done < ${TMP_DIR}/${DATES_FILE}
 
-	(cat ${TMP_DIR}/${TMP_FILE} | tr '\012' '+'; echo "0") | bc
+	(cat ${TMP_DIR}/${tmp_file} | tr '\012' '+'; echo "0") | bc
 }
 
 
