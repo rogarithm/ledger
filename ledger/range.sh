@@ -9,7 +9,7 @@ fi
 
 START_DATE=$1
 END_DATE=$2
-DATES_FILE='dates'
+DATES_FILE='dates_in_range'
 _extract_dates_in_range () {
 	if [ ! -d ${TMP_DIR}/${DATES_FILE} ]; then
 		touch ${TMP_DIR}/${DATES_FILE}
