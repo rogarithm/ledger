@@ -2,20 +2,21 @@
 
 TMP_DIR='/tmp'
 
-START_DATE=$1
-END_DATE=$2
 DATES_FILE='dates_in_range'
 _extract_dates_in_range () {
+	local start_date=$1
+	local end_date=$2
+
 	if [ ! -d ${TMP_DIR}/${DATES_FILE} ]; then
 		touch ${TMP_DIR}/${DATES_FILE}
 	fi
 
 	cat /dev/null > ${TMP_DIR}/${DATES_FILE}
-	echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
+	echo ${start_date} >> ${TMP_DIR}/${DATES_FILE}
 
-	while [ "${START_DATE}" != "${END_DATE}" ]; do
-		START_DATE=$(date -j -f '%m.%d' -v+1d ${START_DATE} +%m.%d)
-		echo ${START_DATE} >> ${TMP_DIR}/${DATES_FILE}
+	while [ "${start_date}" != "${end_date}" ]; do
+		start_date=$(date -j -f '%m.%d' -v+1d ${start_date} +%m.%d)
+		echo ${start_date} >> ${TMP_DIR}/${DATES_FILE}
 	done
 }
 
@@ -46,4 +47,4 @@ compute_total_amounts_in_range () {
 }
 
 
-compute_total_amounts_in_range
+compute_total_amounts_in_range $1 $2
