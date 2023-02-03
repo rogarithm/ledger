@@ -28,25 +28,25 @@ _extract_payments_of_day () {
 }
 
 compute_total_amounts_in_range () {
-	local tmp_file='payments_in_range'
+	local filtered_payments='payments_in_range'
 	local start_date=$1
 	local end_date=$2
 
-	if [ ! -d ${TMP_DIR}/${tmp_file} ]; then
-		touch ${TMP_DIR}/${tmp_file}
+	if [ ! -d ${TMP_DIR}/${filtered_payments} ]; then
+		touch ${TMP_DIR}/${filtered_payments}
 	fi
 
 	_extract_dates_in_range ${start_date} ${end_date}
 
-	cat /dev/null > ${TMP_DIR}/${tmp_file}
+	cat /dev/null > ${TMP_DIR}/${filtered_payments}
 
-	while read DATE; do
-		if [ ${DATE} ]; then
-			_extract_payments_of_day ${DATE} | cut -f3 >> ${TMP_DIR}/${tmp_file}
+	while read date; do
+		if [ ${date} ]; then
+			_extract_payments_of_day ${date} | cut -f3 >> ${TMP_DIR}/${filtered_payments}
 		fi
 	done < ${TMP_DIR}/${DATES_FILE}
 
-	(cat ${TMP_DIR}/${tmp_file} | tr '\012' '+'; echo "0") | bc
+	(cat ${TMP_DIR}/${filtered_payments} | tr '\012' '+'; echo "0") | bc
 }
 
 
