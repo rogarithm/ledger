@@ -22,7 +22,7 @@ _extract_dates_in_range () {
 
 _extract_payments_of_day () {
 	local source_dir='/Users/sehun/personal/ledger'
-	local source_file='2023-01.txt'
+	local source_file='2023.txt'
 
 	# 헤더인 첫 줄을 삭제 -> 빈 줄을 삭제 -> 구분자를 탭 문자로 치환 -> 날짜로 지출 내역 검색
 	gsed -e '1d' ${source_dir}/${source_file} | \
