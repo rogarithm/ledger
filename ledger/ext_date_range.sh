@@ -8,10 +8,10 @@ extract_dates_in_range () {
 	result=${start_at}
 	while [ "${start_at}" != "${end_at}" ]; do
 		start_at=$(date -j -f '%m.%d' -v+1d ${start_at} +%m.%d)
-		result=$result:${start_at}
+		result="$result:${start_at}"
 	done
 
-	echo $result
+	echo "$result"
 	exit 0
 }
 
