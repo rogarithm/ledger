@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-dates=$(cat - | gsed 's/:/\n/g') # 표준 입력으로부터 읽는다
+dates=$(cat -) # 표준 입력으로부터 읽는다
 ledger='/Users/sehun/personal/ledger/2023.txt'
 
 result=''
