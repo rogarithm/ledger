@@ -7,8 +7,7 @@ for date in $dates; do
 	pay=$(gsed -e '1d' $ledger | \
 		gsed -e '/^$/d' | \
 		gsed 's/ | /\t/g' | \
-		grep -e $date | \
-		head -n1)
+		grep -e $date)
 	result="$result:$pay"
 done
 
