@@ -11,7 +11,7 @@ extract_dates_in_range () {
 		result="$result:${start_at}"
 	done
 
-	echo "$result"
+	echo "$result" | gsed 's/:/\n/g'
 	exit 0
 }
 
