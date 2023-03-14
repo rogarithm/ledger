@@ -10,6 +10,6 @@ for date in $dates; do
 		grep -e $date)
 	result="$result:$pay"
 done
-
-echo "$result" | sed 's/^://' # 맨 앞 : 문자 삭제
+# 맨 앞 : 문자 삭제 후 구분자를 \n로 변환
+echo "$result" | sed 's/^://' | gsed 's/:/\n/g'
 exit 0
