@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 dates=$(cat -) # 표준 입력으로부터 읽는다
-ledger='/Users/sehun/personal/ledger/2023.txt'
+ledger='/Users/sehun/personal/finance/2023.txt'
 
 result=''
 for date in $dates; do
