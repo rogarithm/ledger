@@ -1,0 +1,32 @@
+03.02	이발	33400	aesthetic		kakao
+03.02	맥주, 과자	13360	alcohol		kakao
+03.02	햄버거	10000	eat_out		kakao
+03.04	저금	2000	saving	->저금통	kakao
+03.04	맥주	7000	alcohol		kakao
+03.05	토너	20000	aesthetic		kakao
+03.05	화장솜	2500	aesthetic		kakao
+03.05	치킨	9500	eat_out		kakao
+03.05	의자 당근	-15000	income		safebox
+03.06	버스카드	29300	transport		shinhan
+03.07	?	7680	grocery		kakao
+03.07	햄버거	8200	eat_out		kakao
+03.08	?	2600	grocery		kakao
+03.08	햄버거	5100	eat_out		kakao
+03.08	버스카드 환불	-7050	income		shinhan
+03.09	맥주 두 잔, 안주	24000	alcohol		kakao
+03.09	햄버거	5600	eat_out		kakao
+03.09	맥주	4000	alcohol		kakao
+03.10	캐시백	-576	income		kakao
+03.11	저금	1000	saving		kakao
+03.11	커피	1800	coffee		kakao
+03.11	맥주	2750	alcohol		kakao
+03.11	치킨	10000	eat_out		kakao
+03.12	라면	3600	grocery		kakao
+03.18	저금	1000	saving		kakao
+03.18	커피	4900	coffee	모각코	kakao
+03.18	커피	5000	coffee		kakao
+03.18	맥주	20000	alcohol		kakao
+03.18	햄버거	5600	eat_out		kakao
+03.21	햄버거	4700	eat_out		kakao
+03.21	술	7900	alcohol		kakao
+03.23	회덮밥	10000	eat_out	남해바다	kakao
