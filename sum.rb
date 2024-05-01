@@ -1,7 +1,13 @@
 #!/usr/bin/env ruby
 
 # 지출 내역을 읽어온다
-raw_monthly_expenses = File.read('../ledger/2024_3')
+if ARGV.length > 1
+  puts "more input than expected!"
+  puts "exit..."
+  return
+end
+
+raw_monthly_expenses = File.read("../ledger/#{ARGV[0]}")
 
 monthly_expenses = {}
 current_date = ''
