@@ -1,5 +1,5 @@
 require_relative "../lib/expense"
-require_relative "../lib/sum"
+require_relative "../lib/expense_reader"
 
 RSpec::Matchers.define :eq_expense do |expected_expense|
   match do |actual_expense|
@@ -21,7 +21,7 @@ RSpec.describe Expense do
     1000,커피
     file_content
 
-    expense_list = Sum.create_expense_list(raw_expense_list)
+    expense_list = ExpenseReader.create_expense_list(raw_expense_list)
     expect(expense_list.keys[0]).to eq("4/2")
 
     expect(expense_list.values[0][0]).to eq_expense(Expense.new("4100,아침,맥모닝"))

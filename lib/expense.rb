@@ -12,7 +12,3 @@ class Expense
 "#{self.amount} | #{self.category} | #{self.where}"
   end
 end
-
-#puts Expense.new('a').to_s
-#puts Expense.new('a,b').to_s
-#puts Expense.new('a,b,c').to_s

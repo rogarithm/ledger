@@ -1,6 +1,6 @@
 require_relative "./expense"
 
-class Sum
+class ExpenseReader
   def self.create_expense_list(raw_monthly_expenses)
     monthly_expenses = {}
     current_date = ''
