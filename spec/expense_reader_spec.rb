@@ -3,8 +3,8 @@ require_relative "../lib/expense_reader"
 
 require_relative "../spec/helper/spec_helper"
 
-RSpec.describe Expense do
-  it "makes expense list from file" do
+RSpec.describe ExpenseReader, "expense reader" do
+  it "makes expense list from text file" do
     raw_expense_list = <<-file_content
     4/2
     4100,아침,맥모닝
