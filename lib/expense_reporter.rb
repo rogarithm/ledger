@@ -12,6 +12,6 @@ class ExpenseReporter
   #{info_by_day[1].map(&:to_s).join("\n  ")}"
     end
 
-    puts total_expense
+    total_expense
   end
 end

@@ -17,4 +17,4 @@ raw_monthly_expenses = File.read("../ledger/#{ARGV[0]}")
 monthly_expenses = ExpenseReader.create_expense_list(raw_monthly_expenses)
 
 
-ExpenseReporter.compute_total_expense monthly_expenses
+puts ExpenseReporter.compute_total_expense monthly_expenses
