@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require_relative "./expense"
-require_relative "./sum"
+require_relative "./expense_reader"
 
 # 지출 내역을 읽어온다
 if ARGV.length > 1
@@ -13,7 +13,7 @@ end
 raw_monthly_expenses = File.read("../ledger/#{ARGV[0]}")
 
 
-monthly_expenses = create_expense_list(raw_monthly_expenses)
+monthly_expenses = ExpenseReader.create_expense_list(raw_monthly_expenses)
 
 total_expense = 0
 monthly_expenses.each do |info_by_day|
