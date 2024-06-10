@@ -1,2 +1,0 @@
-end_date=$1
-echo $(./lefts.sh kakao) + $(./ext_date_range.sh 01.01 $end_date | ./ext_pay.sh | grep kakao | ./comp_sum.sh) | bc
