@@ -11,6 +11,6 @@ class Expense
   end
 
   def to_s
-"#{self.amount} | #{self.category} | #{self.where}"
+"#{self.at.strftime "%Y-%m-%d"} | #{self.amount} | #{self.category} | #{self.where}"
   end
 end

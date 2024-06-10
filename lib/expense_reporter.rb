@@ -11,4 +11,8 @@ class ExpenseReporter
 
     total_expense
   end
+
+  def self.print_report monthly_expenses
+    monthly_expenses.map(&:to_s).join("\n")
+  end
 end
