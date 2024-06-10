@@ -1,8 +1,10 @@
 class Expense
-  attr_reader :amount, :where, :category
+  attr_reader :at, :amount, :where, :category
 
   def initialize(data)
-    amount, category, where = data.split(",")
+    at, amount, category, where = data.split(",")
+    month, day = at.split("/")
+    @at = Time.new(2024, month, day)
     @amount = amount.to_i
     @category = category
     @where = where

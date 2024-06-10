@@ -12,7 +12,7 @@ class ExpenseReader
       elsif line =~ /^$/
         next
       else
-        expense = Expense.new(line)
+        expense = Expense.new(current_date.strip + "," + line)
         monthly_expenses[current_date] << expense
       end
     end
