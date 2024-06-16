@@ -12,17 +12,26 @@ class Runner
   end
 
   def run
-    if ARGV.length > 1
-      puts "more input than expected!"
-      puts "exit..."
-      return
-    end
-
-    raw_monthly_expenses = File.read("../ledger/#{ARGV[0]}")
-
+    raw_monthly_expenses = read_expense
     monthly_expenses = @fm_reader.create_expense_list(raw_monthly_expenses)
 
-    puts @fm_reporter.compute_total_expense monthly_expenses
-    puts @fm_reporter.print_report monthly_expenses
+    case @option.first
+    when "--sum", "-s"
+      puts @fm_reporter.compute_total_expense monthly_expenses
+    when "--list", "-l"
+      puts @fm_reporter.print_report monthly_expenses
+    when "--filter", "-f"
+      #TODO implement filter function
+    else
+      puts @fm_reporter.print_report monthly_expenses
+    end
+  end
+
+  def read_expense
+    if @option.first.start_with? "-"
+      File.read("../ledger/#{@option[1]}")
+    else
+      File.read("../ledger/#{@option.first}")
+    end
   end
 end
