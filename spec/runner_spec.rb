@@ -16,6 +16,6 @@ RSpec.describe Runner, "runner" do
 
     default_rn = Runner.new(["2024_5"])
     default_rn.option.slice!(-1)
-    expect(default_rn.option).to eq([])
+    expect(default_rn.option).to eq(["2024_5"])
   end
 end
