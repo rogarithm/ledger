@@ -22,7 +22,9 @@ class Runner
     when "--range", "-r"
       puts @fm_reporter.list_in_range *params
     when "--filter", "-f"
-      #TODO implement filter function
+      method_name = :"#{params[0]}_than_amount"
+      params.shift
+      puts @fm_reporter.send(method_name, *params)
     else
       puts @fm_reporter.print_report *params
     end
@@ -39,6 +41,18 @@ class Runner
       raw_expenses = File.read("../ledger/#{argv[0]}")
       expenses = @fm_reader.create_expense_list(raw_expenses)
       return [option_name, from, to, expenses]
+    end
+
+    if argv.first == "--filter" or argv.first == "-f"
+      option_name = argv.first
+      filter_name = argv[1]
+      bound_amount = argv[2].to_i
+
+      argv.shift(3)
+
+      raw_expenses = File.read("../ledger/#{argv[0]}")
+      expenses = @fm_reader.create_expense_list(raw_expenses)
+      return [option_name, filter_name, bound_amount, expenses]
     end
 
     if argv.first.start_with? "-"

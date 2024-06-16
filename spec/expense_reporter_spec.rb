@@ -1,6 +1,11 @@
 require_relative "../lib/expense"
 require_relative "../lib/expense_reporter"
 
+RSpec.configure do |config|
+  config.filter_run_when_matching(focus: true)
+  config.example_status_persistence_file_path = 'spec/pass_fail_history'
+end
+
 RSpec.describe ExpenseReporter, "expense reporter" do
   def create_expense_list txt_expense_list
     txt_expense_list.inject([]) do |expense_list, txt_expense|
@@ -55,6 +60,16 @@ RSpec.describe ExpenseReporter, "expense reporter" do
 
     expect(@rpt.list_in_range "4/3", "4/4", expense_list).to eq(
       "no matching expense for given range!"
+    )
+  end
+
+  it "filter expense higher than specific amount" do
+    expense_list = create_expense_list(
+      ["4/4,1000,여가", "4/6,2000,커피", "4/6,4000,커피"]
+    )
+
+    expect(@rpt.eg_than_amount(2000, expense_list)).to eq(
+      "2024-04-06 | 2000 | 커피 | \n2024-04-06 | 4000 | 커피 | "
     )
   end
 end
