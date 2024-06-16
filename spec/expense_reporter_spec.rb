@@ -57,4 +57,14 @@ RSpec.describe ExpenseReporter, "expense reporter" do
       "no matching expense for given range!"
     )
   end
+
+  it "filter expense higher than specific amount" do
+    expense_list = create_expense_list(
+      ["4/4,1000,여가", "4/6,2000,커피", "4/6,4000,커피"]
+    )
+
+    expect(@rpt.eg_than_amount(2000, expense_list)).to eq(
+      "2024-04-06 | 2000 | 커피 | \n2024-04-06 | 4000 | 커피 | "
+    )
+  end
 end
