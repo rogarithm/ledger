@@ -5,8 +5,8 @@ class ExpenseReporter
     expenses.inject(0) {|sum, expense| sum += expense.amount}
   end
 
-  def print_report monthly_expenses
-    monthly_expenses.map(&:to_s).join("\n")
+  def print_report expenses
+    expenses.map(&:to_s).join("\n")
   end
 
   def list_in_range from, to, expenses
