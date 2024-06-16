@@ -10,9 +10,9 @@ RSpec.describe Runner, "runner" do
     range_rn.option.slice!(-1)
     expect(range_rn.option).to eq(["--range", "4/2", "4/4"])
 
-    filter_rn = Runner.new(["--filter", "2024_5"])
+    filter_rn = Runner.new(["--filter", "ge", "2000", "2024_5"])
     filter_rn.option.slice!(-1)
-    expect(filter_rn.option).to eq(["--filter"])
+    expect(filter_rn.option).to eq(["--filter", "ge", 2000])
 
     default_rn = Runner.new(["2024_5"])
     default_rn.option.slice!(-1)

@@ -34,4 +34,14 @@ class ExpenseReporter
 
     filtered_expenses.map(&:to_s).join("\n")
   end
+
+  def le_than_amount amount, expenses
+    filtered_expenses = expenses.select {|expense| expense.amount <= amount}
+
+    if filtered_expenses.empty?
+      return "no expense that has less or equal amount for given amount!"
+    end
+
+    filtered_expenses.map(&:to_s).join("\n")
+  end
 end
