@@ -14,37 +14,51 @@ class Runner
   def run
     option_name = @option.first
     @option.shift
+    params = @option
+
     case option_name
     when "--sum", "-s"
-      puts @fm_reporter.compute_total_expense *@option
+      puts @fm_reporter.compute_total_expense *params
     when "--range", "-r"
-      puts @fm_reporter.list_in_range *@option
+      puts @fm_reporter.list_in_range *params
     when "--filter", "-f"
       #TODO implement filter function
     else
-      puts @fm_reporter.print_report *@option
+      puts @fm_reporter.print_report *params
     end
   end
 
   def parse_run_option(argv)
     if argv.first == "--range" or argv.first == "-r"
+      option_name = argv.first
       from = argv[1]
       to = argv[2]
-      raw_expenses = File.read("../ledger/#{argv[3]}")
+
+      argv.shift(3)
+
+      raw_expenses = File.read("../ledger/#{argv[0]}")
       expenses = @fm_reader.create_expense_list(raw_expenses)
-      return [argv.first, from, to, expenses]
+      return [option_name, from, to, expenses]
     end
 
     if argv.first.start_with? "-"
-      raw_expenses = File.read("../ledger/#{argv[1]}")
+      option_name = argv.first
+
+      argv.shift(1)
+
+      raw_expenses = File.read("../ledger/#{argv[0]}")
       expenses = @fm_reader.create_expense_list(raw_expenses)
-      return [argv.first, expenses]
+      return [option_name, expenses]
     end
 
     if argv.first.start_with?("-") == false
-      raw_expenses = File.read("../ledger/#{argv.first}")
+      file_name = argv.first
+
+      argv.shift(1)
+
+      raw_expenses = File.read("../ledger/#{file_name}")
       expenses = @fm_reader.create_expense_list(raw_expenses)
-      [argv.first, expenses]
+      [file_name, expenses]
     end
   end
 end
