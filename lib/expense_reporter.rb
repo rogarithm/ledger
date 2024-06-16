@@ -10,6 +10,7 @@ class ExpenseReporter
   end
 
   def list_in_range from, to, expenses
+
     from_month, from_day = from.split("/")
     from = Time.new(2024, from_month.to_i, from_day.to_i)
     to_month, to_day = to.split("/")
