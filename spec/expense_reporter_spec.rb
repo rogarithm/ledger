@@ -39,4 +39,30 @@ RSpec.describe ExpenseReporter, "expense reporter" do
     "2024-04-02 | 4100 | 아침 | 맥모닝\n2024-04-02 | 1000 | 여가 | 네이버 시리즈\n2024-04-02 | 1000 | 커피 | "
     )
   end
+
+  it "list expense from start date to end date" do
+    expense_list = [
+      Expense.new("4/2,4100,아침,맥모닝"),
+      Expense.new("4/4,1000,여가,네이버 시리즈"),
+      Expense.new("4/6,1000,커피")
+    ]
+
+    reporter = ExpenseReporter.new
+    expect(reporter.list_in_range "4/2", "4/5", expense_list).to eq(
+      "2024-04-02 | 4100 | 아침 | 맥모닝\n2024-04-04 | 1000 | 여가 | 네이버 시리즈"
+    )
+  end
+
+  it "shows message when no expense in given range" do
+    expense_list = [
+      Expense.new("4/2,4100,아침,맥모닝"),
+      Expense.new("4/4,1000,여가,네이버 시리즈"),
+      Expense.new("4/6,1000,커피")
+    ]
+
+    reporter = ExpenseReporter.new
+    expect(reporter.list_in_range "4/7", "4/10", expense_list).to eq(
+      "no matching expense for given range!"
+    )
+  end
 end
