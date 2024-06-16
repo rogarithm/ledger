@@ -12,18 +12,20 @@ class Runner
   end
 
   def run
-    raw_monthly_expenses = read_expense
-    monthly_expenses = @fm_reader.create_expense_list(raw_monthly_expenses)
+    raw_expenses = read_expense
+    expenses = @fm_reader.create_expense_list(raw_expenses)
 
     case @option.first
     when "--sum", "-s"
-      puts @fm_reporter.compute_total_expense monthly_expenses
+      puts @fm_reporter.compute_total_expense expenses
     when "--list", "-l"
-      puts @fm_reporter.print_report monthly_expenses
+      puts @fm_reporter.print_report expenses
+    when "--range", "-r"
+      puts @fm_reporter.list_in_range expenses
     when "--filter", "-f"
       #TODO implement filter function
     else
-      puts @fm_reporter.print_report monthly_expenses
+      puts @fm_reporter.print_report expenses
     end
   end
 
