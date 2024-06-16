@@ -18,10 +18,10 @@ class Runner
     case @option.first
     when "--sum", "-s"
       puts @fm_reporter.compute_total_expense expenses
-    when "--list", "-l"
-      puts @fm_reporter.print_report expenses
     when "--range", "-r"
-      puts @fm_reporter.list_in_range expenses
+      from = @option[1]
+      to = @option[2]
+      puts @fm_reporter.list_in_range from, to, expenses
     when "--filter", "-f"
       #TODO implement filter function
     else
@@ -30,7 +30,9 @@ class Runner
   end
 
   def read_expense
-    if @option.first.start_with? "-"
+    if @option.first == "--range" or @option.first == "-r"
+      File.read("../ledger/#{@option[3]}")
+    elsif @option.first.start_with? "-"
       File.read("../ledger/#{@option[1]}")
     else
       File.read("../ledger/#{@option.first}")
