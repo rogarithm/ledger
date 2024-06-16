@@ -1,6 +1,11 @@
 require_relative "../lib/expense"
 require_relative "../lib/expense_reporter"
 
+RSpec.configure do |config|
+  config.filter_run_when_matching(focus: true)
+  config.example_status_persistence_file_path = 'spec/pass_fail_history'
+end
+
 RSpec.describe ExpenseReporter, "expense reporter" do
   def create_expense_list txt_expense_list
     txt_expense_list.inject([]) do |expense_list, txt_expense|
