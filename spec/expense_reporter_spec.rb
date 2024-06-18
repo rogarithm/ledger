@@ -17,9 +17,19 @@ RSpec.describe ExpenseReporter, "expense reporter" do
     @rpt = ExpenseReporter.new
   end
 
+  it "convert back to the form equal to db" do
+    expense_list = create_expense_list(
+      ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈"]
+    )
+
+    expect(@rpt.back_to_db_form(expense_list)).to eq(
+      "4/2\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n"
+    )
+  end
+
   it "computes sum of all expense from 1 day" do
     expense_list = create_expense_list(
-      ["4/2,4100,아침,맥모닝", "4/2,1000,여가,네이버 시리즈"]
+      ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈"]
     )
 
     expect(@rpt.compute_total_expense expense_list).to eq(5100)
@@ -27,7 +37,7 @@ RSpec.describe ExpenseReporter, "expense reporter" do
 
   it "computes sum of all expense from more than 2 days" do
     expense_list = create_expense_list(
-      ["4/2,4100,아침,맥모닝", "4/3,1000,커피"]
+      ["4/2,4100,아침.맥모닝", "4/3,1000,커피"]
     )
 
     expect(@rpt.compute_total_expense expense_list).to eq(5100)
@@ -35,7 +45,7 @@ RSpec.describe ExpenseReporter, "expense reporter" do
 
   it "prints expense list" do
     expense_list = create_expense_list(
-      ["4/2,4100,아침,맥모닝", "4/2,1000,커피"]
+      ["4/2,4100,아침.맥모닝", "4/2,1000,커피"]
     )
 
     expect(@rpt.print_report expense_list).to eq(
@@ -45,7 +55,7 @@ RSpec.describe ExpenseReporter, "expense reporter" do
 
   it "list expense from start date to end date" do
     expense_list = create_expense_list(
-      ["4/4,1000,여가,네이버 시리즈", "4/6,1000,커피"]
+      ["4/4,1000,여가.네이버 시리즈", "4/6,1000,커피"]
     )
 
     expect(@rpt.list_in_range "4/3", "4/5", expense_list).to eq(
@@ -55,7 +65,7 @@ RSpec.describe ExpenseReporter, "expense reporter" do
 
   it "shows message when no expense in given range" do
     expense_list = create_expense_list(
-      ["4/2,4100,아침,맥모닝"]
+      ["4/2,4100,아침.맥모닝"]
     )
 
     expect(@rpt.list_in_range "4/3", "4/4", expense_list).to eq(
