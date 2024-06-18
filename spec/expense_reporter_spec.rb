@@ -39,7 +39,7 @@ RSpec.describe ExpenseReporter, "expense reporter" do
     )
 
     expect(@rpt.print_report expense_list).to eq(
-      "2024-04-02 | 4100 | 아침.맥모닝 | \n2024-04-02 | 1000 | 커피 | "
+      "2024-04-02 | 4100 | 아침 | 맥모닝\n2024-04-02 | 1000 | 커피 | "
     )
   end
 
@@ -49,7 +49,7 @@ RSpec.describe ExpenseReporter, "expense reporter" do
     )
 
     expect(@rpt.list_in_range "4/3", "4/5", expense_list).to eq(
-      "2024-04-04 | 1000 | 여가.네이버 시리즈 | "
+      "2024-04-04 | 1000 | 여가 | 네이버 시리즈"
     )
   end
 
