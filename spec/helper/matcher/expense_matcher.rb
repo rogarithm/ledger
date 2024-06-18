@@ -5,6 +5,6 @@ RSpec::Matchers.define :eq_expense do |expected_expense|
       actual_expense.detail == expected_expense.detail
   end
   failure_message do |actual_expense|
-    "#{generate_node_info_msg actual_expense, expected_expense}\n"
+    "not same with the expected expense!"
   end
 end
