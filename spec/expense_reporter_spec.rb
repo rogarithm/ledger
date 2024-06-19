@@ -17,13 +17,24 @@ RSpec.describe ExpenseReporter, "expense reporter" do
     @rpt = ExpenseReporter.new
   end
 
-  it "convert back to the form equal to db" do
+  it "convert expenses of 1 day back to the form equal to db" do
     expense_list = create_expense_list(
       ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈"]
     )
 
     expect(@rpt.back_to_db_form(expense_list)).to eq(
       "4/2\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n"
+    )
+  end
+
+  it "convert expenses of 2 days back to the form equal to db" do
+    expense_list = create_expense_list(
+      ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈",
+      "4/3,4100,아침.맥모닝", "4/3,1000,여가.네이버 시리즈"]
+    )
+
+    expect(@rpt.back_to_db_form(expense_list)).to eq(
+      "4/2\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n4/3\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n"
     )
   end
 
