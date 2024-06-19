@@ -44,6 +44,10 @@ class Runner
     end
     expenses = @fm_reader.create_expense_list(raw_expenses)
 
+    if argv.first == nil
+      return ['ignore', expenses]
+    end
+
     if argv.first == "--range" or argv.first == "-r"
       option_name = argv.first
       from = argv[1]
@@ -60,16 +64,7 @@ class Runner
       return [option_name, filter_name, bound_amount, expenses]
     end
 
-    if argv.first.start_with? "-"
-      option_name = argv.first
-
-      return [option_name, expenses]
-    end
-
-    if argv.first.start_with?("-") == false
-      file_name = argv.first
-
-      [file_name, expenses]
-    end
+    option_name = argv.first
+    return [option_name, expenses]
   end
 end
