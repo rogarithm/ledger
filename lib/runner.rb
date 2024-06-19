@@ -12,9 +12,7 @@ class Runner
   end
 
   def run
-    option_name = @option.first
-    @option.shift
-    params = @option
+    option_name, params = @option[0], @option[1..-1]
 
     case option_name
     when "--sum", "-s"
