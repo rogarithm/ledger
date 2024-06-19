@@ -37,7 +37,7 @@ class ExpenseReporter
       return "no matching expense for given range!"
     end
 
-    expenses_in_range.map(&:to_s).join("\n")
+    expenses_in_range
   end
 
   def eg_than_amount amount, expenses
@@ -47,7 +47,7 @@ class ExpenseReporter
       return "no expense that has higher or equal amount for given amount!"
     end
 
-    filtered_expenses.map(&:to_s).join("\n")
+    filtered_expenses
   end
 
   def le_than_amount amount, expenses
@@ -57,6 +57,6 @@ class ExpenseReporter
       return "no expense that has less or equal amount for given amount!"
     end
 
-    filtered_expenses.map(&:to_s).join("\n")
+    filtered_expenses
   end
 end
