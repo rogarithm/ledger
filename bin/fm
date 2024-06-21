@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require_relative '../lib/runner'
+require_relative '../lib/pipe_runner'
 
-runner = Runner.new(ARGV)
+runner = PipeRunner.new(ARGV)
 runner.run
