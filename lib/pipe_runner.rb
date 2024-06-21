@@ -1,13 +1,15 @@
 require_relative "./expense"
 require_relative "./expense_reader"
 require_relative "./expense_reporter"
+require_relative "./expense_filter"
 
 class PipeRunner
-  attr_reader :fm_reader, :fm_reporter, :option
+  attr_reader :fm_reader, :fm_reporter, :fm_filter, :option
 
   def initialize(argv)
     @fm_reader = ExpenseReader.new
     @fm_reporter = ExpenseReporter.new
+    @fm_filter = ExpenseFilter.new
     @option = parse_run_option(argv)
   end
 
@@ -18,11 +20,11 @@ class PipeRunner
     when "--sum", "-s"
       puts @fm_reporter.compute_total_expense *params
     when "--range", "-r"
-      puts @fm_reporter.back_to_db_form @fm_reporter.list_in_range *params
+      puts @fm_reporter.back_to_db_form @fm_filter.list_in_range *params
     when "--filter", "-f"
       method_name = :"#{params[0]}_than_amount"
       params.shift
-      puts @fm_reporter.back_to_db_form @fm_reporter.send(method_name, *params)
+      puts @fm_reporter.back_to_db_form @fm_filter.send(method_name, *params)
     else
       puts @fm_reporter.print_report *params
     end
