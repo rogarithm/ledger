@@ -27,6 +27,19 @@ class PipeRunner
       puts @fm_reporter.back_to_db_form @fm_filter.send(method_name, *params)
     when "--category", "-c"
       puts @fm_reporter.back_to_db_form @fm_filter.in_category *params
+    when "--report-by-category", "-rbc"
+      categories = @fm_reporter.category_list *params
+      sums = []
+      categories.each do |category|
+        cat_expenses = @fm_filter.in_category category, *params
+        sums << @fm_reporter.sum_by_cat(cat_expenses, category)
+      end
+      puts sums.join("\n")
+
+      categories.each do |category|
+        cat_expenses = @fm_filter.in_category category, *params
+        puts @fm_reporter.report_by_cat cat_expenses, category
+      end
     else
       puts @fm_reporter.print_report *params
     end
