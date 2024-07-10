@@ -21,7 +21,7 @@ class Runner
     raw_expenses = ''
     # 항상 파일로부터 가계부 정보를 가져온다
     raw_expenses = File.read("../ledger/#{argv[argv.length - 1]}")
-    expenses = @fm_reader.create_expense_list(raw_expenses)
+    expenses = @fm_reader.read_expense_list(raw_expenses)
 
     return ['ignore', expenses]
   end

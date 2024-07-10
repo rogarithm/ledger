@@ -1,7 +1,7 @@
 require_relative "./expense"
 
 class ExpenseReader
-  def create_expense_list(raw_expenses)
+  def read_expense_list(raw_expenses)
     expenses = []
     current_date = ''
 

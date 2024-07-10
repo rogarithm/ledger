@@ -51,7 +51,7 @@ class PipeRunner
     $stdin.each_line do |expense_txt|
       raw_expenses += expense_txt
     end
-    expenses = @fm_reader.create_expense_list(raw_expenses)
+    expenses = @fm_reader.read_expense_list(raw_expenses)
 
     # request to printer
     if argv.first == nil

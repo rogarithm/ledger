@@ -13,7 +13,7 @@ RSpec.describe ExpenseReader, "expense reader" do
     file_content
 
     reader = ExpenseReader.new
-    expense_list = reader.create_expense_list(raw_expense_list)
+    expense_list = reader.read_expense_list(raw_expense_list)
 
     expect(expense_list[0]).to eq_expense(Expense.new("4/2,4100,아침,맥모닝"))
     expect(expense_list[1]).to eq_expense(Expense.new("4/2,1000,여가,네이버 시리즈"))
