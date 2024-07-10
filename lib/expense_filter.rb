@@ -1,6 +1,16 @@
 require_relative './expense'
 
 class ExpenseFilter
+  def in_category category, expenses
+    filtered_expenses = expenses.select {|expense| expense.category != nil and expense.category.start_with?(category)}
+
+    if filtered_expenses.empty?
+      return "no expense for given category!"
+    end
+
+    filtered_expenses
+  end
+
   def list_in_range from, to, expenses
 
     from_month, from_day = from.split("/")

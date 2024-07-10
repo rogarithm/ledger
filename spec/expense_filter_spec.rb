@@ -48,4 +48,14 @@ RSpec.describe ExpenseFilter, "expense filter" do
       [Expense.new("4/6,2000,커피"), Expense.new("4/6,4000,커피")]
     )
   end
+
+  it "filter expense in specific category" do
+    expense_list = create_expense_list(
+      ["4/4,1000,여가", "4/6,2000,커피", "4/6,4000,커피"]
+    )
+
+    expect(@ftr.in_category("커피", expense_list)).to eq_expenses(
+      [Expense.new("4/6,2000,커피"), Expense.new("4/6,4000,커피")]
+    )
+  end
 end

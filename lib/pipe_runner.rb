@@ -25,6 +25,21 @@ class PipeRunner
       method_name = :"#{params[0]}_than_amount"
       params.shift
       puts @fm_reporter.back_to_db_form @fm_filter.send(method_name, *params)
+    when "--category", "-c"
+      puts @fm_reporter.back_to_db_form @fm_filter.in_category *params
+    when "--report-by-category", "-rbc"
+      categories = @fm_reporter.category_list *params
+      sums = []
+      categories.each do |category|
+        cat_expenses = @fm_filter.in_category category, *params
+        sums << @fm_reporter.sum_by_cat(cat_expenses, category)
+      end
+      puts sums.join("\n")
+
+      categories.each do |category|
+        cat_expenses = @fm_filter.in_category category, *params
+        puts @fm_reporter.report_by_cat cat_expenses, category
+      end
     else
       puts @fm_reporter.print_report *params
     end
@@ -59,6 +74,13 @@ class PipeRunner
       bound_amount = argv[2].to_i
 
       return [option_name, filter_name, bound_amount, expenses]
+    end
+
+    if argv.first == "--category" or argv.first == "-c"
+      option_name = argv.first
+      category_name = argv[1]
+
+      return [option_name, category_name, expenses]
     end
 
     option_name = argv.first

@@ -5,6 +5,28 @@ class ExpenseReporter
     expenses.inject(0) {|sum, expense| sum += expense.amount}
   end
 
+  def sum_by_cat expenses, category
+    "#{category}...#{compute_total_expense expenses}"
+  end
+
+  def report_by_cat expenses, category
+    result = [category]
+    expenses.each do |expense|
+      result << "#{expense.at.strftime "%m/%d"}...#{expense.amount}"
+    end
+    result.join("\n")
+  end
+
+  def category_list expenses
+    result = []
+    expenses.inject(result) do |category_list, expense|
+      category_list << expense.category
+    end
+    result.select! {|e| e != ""}
+    uniq_result = result.uniq
+    uniq_result
+  end
+
   def back_to_db_form expenses
     result = ""
     expenses.group_by { |expense| expense.at }.transform_values do |expense_group|

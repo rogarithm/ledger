@@ -65,4 +65,27 @@ RSpec.describe ExpenseReporter, "expense reporter" do
       "2024-04-02 | 4100 | 아침 | 맥모닝\n2024-04-02 | 1000 | 커피 | "
     )
   end
+
+  it "can collect all categories in ledger" do
+    expense_list = create_expense_list(
+      ["5/1,11000,생필품.파스", "5/1,10000,식사.육장정",
+       "5/1,4300,커피.프로스퍼", "5/5,9000,약", "5/5,18260,책", "5/5,76500,신발"]
+    )
+
+    expect(@rpt.category_list expense_list).to eq(
+      ["생필품", "식사", "커피", "약", "책", "신발"]
+    )
+  end
+
+  it "don't collect same category twice" do
+    expense_list = create_expense_list(
+      ["5/1,11000,생필품.파스", "5/1,10000,식사.육장정",
+       "5/1,4300,커피.프로스퍼", "5/5,9000,약", "5/5,18260,책", "5/5,76500,신발",
+       "5/6,10000,식사.육장정"]
+    )
+
+    expect(@rpt.category_list expense_list).to eq(
+      ["생필품", "식사", "커피", "약", "책", "신발"]
+    )
+  end
 end
