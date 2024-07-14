@@ -17,8 +17,6 @@ class PipeRunner
     option_name, params = @option[0], @option[1..-1]
 
     case option_name
-    when "--sum", "-s"
-      puts @reporter.compute_total_expense *params
     when "--range", "-r"
       puts @reporter.back_to_db_form @filter.list_in_range *params
     when "--filter", "-f"
@@ -28,7 +26,7 @@ class PipeRunner
     when "--category", "-c"
       puts @reporter.back_to_db_form @filter.in_category *params
     else
-      puts @reporter.print_report *params
+      puts @reporter.back_to_db_form *params # 필터링 없이 보여준다
     end
   end
 
@@ -40,12 +38,6 @@ class PipeRunner
     end
     expenses = @reader.read_expense_list(raw_expenses)
 
-    # request to printer
-    if argv.first == nil
-      return ['ignore', expenses]
-    end
-
-    # request to filter
     if argv.first == "--range" or argv.first == "-r"
       option_name = argv.first
       from = argv[1]
@@ -54,7 +46,6 @@ class PipeRunner
       return [option_name, from, to, expenses]
     end
 
-    # request to filter
     if argv.first == "--filter" or argv.first == "-f"
       option_name = argv.first
       filter_name = argv[1]

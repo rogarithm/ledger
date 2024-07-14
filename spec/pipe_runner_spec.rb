@@ -5,10 +5,6 @@ RSpec.describe PipeRunner, "runner" do
     # 항상 표준 입력으로부터 가계부 데이터를 받는 것을 가정한다
     $stdin = "4/2\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n"
 
-    sum_rn = PipeRunner.new(["--sum", "2024_5"])
-    sum_rn.option.slice!(-1)
-    expect(sum_rn.option).to eq(["--sum"])
-
     range_rn = PipeRunner.new(["--range", "4/2", "4/4", "2024_5"])
     range_rn.option.slice!(-1)
     expect(range_rn.option).to eq(["--range", "4/2", "4/4"])
