@@ -18,4 +18,20 @@ class Expense
   def to_s
 "#{self.at.strftime "%Y-%m-%d"} | #{self.amount} | #{self.category} | #{self.detail}"
   end
+
+  def format_amount
+    self.amount
+      .to_s
+      .gsub(/\D/, '')
+      .reverse
+      .gsub(/.{3}/, '\0,')
+      .sub(/,$/, '')
+      .reverse
+  end
+
+  def unformat_amount amount
+    amount
+      .gsub(/,/, '')
+  end
+
 end
