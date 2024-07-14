@@ -1,15 +1,13 @@
 require_relative "./expense"
 require_relative "./expense_reader"
-require_relative "./expense_reporter"
 require_relative "./expense_filter"
 
 class PipeRunner
-  attr_reader :fm_reader, :fm_reporter, :fm_filter, :option
+  attr_reader :reader, :filter, :option
 
   def initialize(argv)
-    @fm_reader = ExpenseReader.new
-    @fm_reporter = ExpenseReporter.new
-    @fm_filter = ExpenseFilter.new
+    @reader = ExpenseReader.new
+    @filter = ExpenseFilter.new
     @option = parse_run_option(argv)
   end
 
@@ -17,31 +15,16 @@ class PipeRunner
     option_name, params = @option[0], @option[1..-1]
 
     case option_name
-    when "--sum", "-s"
-      puts @fm_reporter.compute_total_expense *params
     when "--range", "-r"
-      puts @fm_reporter.back_to_db_form @fm_filter.list_in_range *params
+      puts @reader.back_to_db_form @filter.list_in_range *params
     when "--filter", "-f"
       method_name = :"#{params[0]}_than_amount"
       params.shift
-      puts @fm_reporter.back_to_db_form @fm_filter.send(method_name, *params)
+      puts @reader.back_to_db_form @filter.send(method_name, *params)
     when "--category", "-c"
-      puts @fm_reporter.back_to_db_form @fm_filter.in_category *params
-    when "--report-by-category", "-rbc"
-      categories = @fm_reporter.category_list *params
-      sums = []
-      categories.each do |category|
-        cat_expenses = @fm_filter.in_category category, *params
-        sums << @fm_reporter.sum_by_cat(cat_expenses, category)
-      end
-      puts sums.join("\n")
-
-      categories.each do |category|
-        cat_expenses = @fm_filter.in_category category, *params
-        puts @fm_reporter.report_by_cat cat_expenses, category
-      end
+      puts @reader.back_to_db_form @filter.in_category *params
     else
-      puts @fm_reporter.print_report *params
+      puts @reader.back_to_db_form *params # 필터링 없이 보여준다
     end
   end
 
@@ -51,14 +34,8 @@ class PipeRunner
     $stdin.each_line do |expense_txt|
       raw_expenses += expense_txt
     end
-    expenses = @fm_reader.create_expense_list(raw_expenses)
+    expenses = @reader.read_expense_list(raw_expenses)
 
-    # request to printer
-    if argv.first == nil
-      return ['ignore', expenses]
-    end
-
-    # request to filter
     if argv.first == "--range" or argv.first == "-r"
       option_name = argv.first
       from = argv[1]
@@ -67,7 +44,6 @@ class PipeRunner
       return [option_name, from, to, expenses]
     end
 
-    # request to filter
     if argv.first == "--filter" or argv.first == "-f"
       option_name = argv.first
       filter_name = argv[1]

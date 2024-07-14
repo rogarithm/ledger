@@ -9,7 +9,7 @@ RSpec.configure do |config|
 end
 
 RSpec.describe ExpenseFilter, "expense filter" do
-  def create_expense_list txt_expense_list
+  def read_expense_list txt_expense_list
     txt_expense_list.inject([]) do |expense_list, txt_expense|
       expense_list << Expense.new(txt_expense)
     end
@@ -20,7 +20,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
   end
 
   it "list expense from start date to end date" do
-    expense_list = create_expense_list(
+    expense_list = read_expense_list(
       ["4/4,1000,여가.네이버 시리즈", "4/6,1000,커피"]
     )
 
@@ -30,7 +30,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
   end
 
   it "shows message when no expense in given range" do
-    expense_list = create_expense_list(
+    expense_list = read_expense_list(
       ["4/2,4100,아침.맥모닝"]
     )
 
@@ -40,7 +40,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
   end
 
   it "filter expense higher than specific amount" do
-    expense_list = create_expense_list(
+    expense_list = read_expense_list(
       ["4/4,1000,여가", "4/6,2000,커피", "4/6,4000,커피"]
     )
 
@@ -50,7 +50,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
   end
 
   it "filter expense in specific category" do
-    expense_list = create_expense_list(
+    expense_list = read_expense_list(
       ["4/4,1000,여가", "4/6,2000,커피", "4/6,4000,커피"]
     )
 

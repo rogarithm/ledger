@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+# 키워드가 들어가있는 루비 파일을 찾는다
+%x{find . -type f -name "*.rb"}.split("\n").each do |ruby_file|
+  if %x{cat #{ruby_file} | grep #{ARGV[0]}} != ""
+    mv_files << ruby_file
+  end
+end
+
+# 해당 파일 경로를 배열로 만들어서, 일괄로 값을 바꾼다
+# 위 파이핑한 명령을 바로 배열로 만들 수는 없을까?
+mv_files.each do |file|
+  # 여기서 -i 옵션 뒤의 ""은 macos에서 필요하다
+  `sed -i "" 's/#{ARGV[0]}/#{ARGV[1]}/g' #{file}`
+end

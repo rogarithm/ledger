@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require_relative '../lib/reporter_runner'
+
+runner = ReporterRunner.new(ARGV)
+runner.run
