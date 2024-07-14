@@ -43,12 +43,7 @@ class ReporterRunner
     end
     expenses = @reader.read_expense_list(raw_expenses)
 
-    # request to printer
-    if argv.first == nil
-      return ['ignore', expenses]
-    end
-
-    if argv.first == "--report-by-category" or argv.first == "-rbc"
+    if argv.first == "--category" or argv.first == "-c"
       option_name = argv.first
 
       return [option_name, expenses]
