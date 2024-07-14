@@ -6,13 +6,14 @@ class ExpenseReporter
   end
 
   def sum_by_cat expenses, category
-    "#{category}...#{compute_total_expense expenses}"
+    total_expense = Expense.new("1/1,#{compute_total_expense expenses},x")
+    "#{category}...#{total_expense.format_amount}"
   end
 
   def report_by_cat expenses, category
     result = [category]
     expenses.each do |expense|
-      result << "#{expense.at.strftime "%m/%d"}...#{expense.amount}"
+      result << "#{expense.at.strftime "%m/%d"}...#{expense.format_amount}"
     end
     result.join("\n")
   end
