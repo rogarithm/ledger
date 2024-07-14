@@ -1,14 +1,12 @@
 require_relative "./expense"
 require_relative "./expense_reader"
-require_relative "./expense_reporter"
 require_relative "./expense_filter"
 
 class PipeRunner
-  attr_reader :reader, :reporter, :filter, :option
+  attr_reader :reader, :filter, :option
 
   def initialize(argv)
     @reader = ExpenseReader.new
-    @reporter = ExpenseReporter.new
     @filter = ExpenseFilter.new
     @option = parse_run_option(argv)
   end
@@ -18,15 +16,15 @@ class PipeRunner
 
     case option_name
     when "--range", "-r"
-      puts @reporter.back_to_db_form @filter.list_in_range *params
+      puts @reader.back_to_db_form @filter.list_in_range *params
     when "--filter", "-f"
       method_name = :"#{params[0]}_than_amount"
       params.shift
-      puts @reporter.back_to_db_form @filter.send(method_name, *params)
+      puts @reader.back_to_db_form @filter.send(method_name, *params)
     when "--category", "-c"
-      puts @reporter.back_to_db_form @filter.in_category *params
+      puts @reader.back_to_db_form @filter.in_category *params
     else
-      puts @reporter.back_to_db_form *params # 필터링 없이 보여준다
+      puts @reader.back_to_db_form *params # 필터링 없이 보여준다
     end
   end
 

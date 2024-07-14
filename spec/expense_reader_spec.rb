@@ -4,6 +4,35 @@ require_relative "../lib/expense_reader"
 require_relative "../spec/helper/spec_helper"
 
 RSpec.describe ExpenseReader, "reads expense list" do
+  def read_expense_list txt_expense_list
+    txt_expense_list.inject([]) do |expense_list, txt_expense|
+      expense_list << Expense.new(txt_expense)
+    end
+  end
+
+  it "convert expenses of 1 day back to the form equal to db" do
+    reader = ExpenseReader.new
+    expense_list = read_expense_list(
+      ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈"]
+    )
+
+    expect(reader.back_to_db_form(expense_list)).to eq(
+      "4/2\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n"
+    )
+  end
+
+  it "convert expenses of 2 days back to the form equal to db" do
+    reader = ExpenseReader.new
+    expense_list = read_expense_list(
+      ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈",
+      "4/3,4100,아침.맥모닝", "4/3,1000,여가.네이버 시리즈"]
+    )
+
+    expect(reader.back_to_db_form(expense_list)).to eq(
+      "4/2\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n4/3\n4100,아침.맥모닝\n1000,여가.네이버 시리즈\n"
+    )
+  end
+
   it "from plain text file" do
     raw_expense_list = <<-file_content
     4/2
