@@ -17,7 +17,7 @@ class ReporterRunner
     option_name, params = @option[0], @option[1..-1]
 
     case option_name
-    when "--report-by-category", "-rbc"
+    when "--category", "-c"
       categories = @reporter.category_list *params
       sums = []
       categories.each do |category|

@@ -6,13 +6,18 @@ class ExpenseReporter
   end
 
   def sum_by_cat expenses, category
-    "#{category}...#{compute_total_expense expenses}"
+    total_expense = Expense.new("1/1,#{compute_total_expense expenses},x")
+    "#{category}...#{total_expense.format_amount}"
   end
 
   def report_by_cat expenses, category
+    max_expense = expenses.max {|e1, e2| e1.amount.to_s.size <=> e2.amount.to_s.size}
+    max_size = max_expense.amount.to_s.size
+
     result = [category]
     expenses.each do |expense|
-      result << "#{expense.at.strftime "%m/%d"}...#{expense.amount}"
+      dots_to_pad = '.' * (max_size - expense.amount.to_s.size)
+      result << "#{expense.at.strftime "%m/%d"}...#{dots_to_pad}#{expense.format_amount}"
     end
     result.join("\n")
   end
