@@ -43,12 +43,6 @@ class ReporterRunner
     end
     expenses = @reader.read_expense_list(raw_expenses)
 
-    if argv.first == "--category" or argv.first == "-c"
-      option_name = argv.first
-
-      return [option_name, expenses]
-    end
-
     option_name = argv.first
     return [option_name, expenses]
   end
