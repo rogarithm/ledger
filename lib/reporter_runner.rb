@@ -17,7 +17,7 @@ class ReporterRunner
     option_name, params = @option[0], @option[1..-1]
 
     case option_name
-    when "--report-by-category", "-rbc"
+    when "--sum-by-cat", "-cs"
       categories = @reporter.category_list *params
       sums = []
       categories.each do |category|
@@ -25,7 +25,8 @@ class ReporterRunner
         sums << @reporter.sum_by_cat(cat_expenses, category)
       end
       puts sums.join("\n")
-
+    when "--list-by-cat", "-cl"
+      categories = @reporter.category_list *params
       categories.each do |category|
         cat_expenses = @filter.in_category category, *params
         puts @reporter.report_by_cat cat_expenses, category
