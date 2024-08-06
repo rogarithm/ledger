@@ -28,7 +28,7 @@ class ReporterRunner
       end
       puts sums.join("\n")
     when "--sum-by-upper-cat", "-ucs"
-      upper_cat = instance_eval(File.readlines(UPPER_CAT_PATH).join(""))
+      upper_cat = load(File.readlines(UPPER_CAT_PATH).join(""))
       categories = @reporter.category_list *params
       categories.each do |category|
         cat_expenses = @filter.in_category category, *params
