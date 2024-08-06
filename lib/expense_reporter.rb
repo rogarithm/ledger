@@ -6,8 +6,7 @@ class ExpenseReporter
   end
 
   def sum_by_cat expenses, category
-    total_expense = Expense.new("1/1,#{compute_total_expense expenses},x")
-    "#{category}...#{total_expense.format_amount}"
+    compute_total_expense expenses
   end
 
   def report_by_cat expenses, category

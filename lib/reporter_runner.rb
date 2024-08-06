@@ -17,15 +17,16 @@ class ReporterRunner
     option_name, params = @option[0], @option[1..-1]
 
     case option_name
-    when "--category", "-c"
+    when "--sum-by-cat", "-cs"
       categories = @reporter.category_list *params
       sums = []
       categories.each do |category|
         cat_expenses = @filter.in_category category, *params
-        sums << @reporter.sum_by_cat(cat_expenses, category)
+        sums << "#{category}...#{@reporter.sum_by_cat(cat_expenses, category)}"
       end
       puts sums.join("\n")
-
+    when "--list-by-cat", "-cl"
+      categories = @reporter.category_list *params
       categories.each do |category|
         cat_expenses = @filter.in_category category, *params
         puts @reporter.report_by_cat cat_expenses, category
@@ -42,12 +43,6 @@ class ReporterRunner
       raw_expenses += expense_txt
     end
     expenses = @reader.read_expense_list(raw_expenses)
-
-    if argv.first == "--category" or argv.first == "-c"
-      option_name = argv.first
-
-      return [option_name, expenses]
-    end
 
     option_name = argv.first
     return [option_name, expenses]
