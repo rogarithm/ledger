@@ -6,7 +6,7 @@ class ExpenseReporter
   end
 
   def sum_by_cat expenses, category
-    "#{category}...#{compute_total_expense expenses}"
+    compute_total_expense expenses
   end
 
   def report_by_cat expenses, category

@@ -22,7 +22,7 @@ class ReporterRunner
       sums = []
       categories.each do |category|
         cat_expenses = @filter.in_category category, *params
-        sums << @reporter.sum_by_cat(cat_expenses, category)
+        sums << "#{category}...#{@reporter.sum_by_cat(cat_expenses, category)}"
       end
       puts sums.join("\n")
     when "--list-by-cat", "-cl"
