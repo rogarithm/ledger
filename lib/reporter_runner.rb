@@ -4,6 +4,8 @@ require_relative "./expense_reporter"
 require_relative "./expense_filter"
 
 class ReporterRunner
+  UPPER_CAT_PATH = "./cat"
+
   attr_reader :reader, :reporter, :filter, :option
 
   def initialize(argv)
@@ -25,6 +27,19 @@ class ReporterRunner
         sums << "#{category}...#{@reporter.sum_by_cat(cat_expenses, category)}"
       end
       puts sums.join("\n")
+    when "--sum-by-upper-cat", "-ucs"
+      upper_cat = load(File.readlines(UPPER_CAT_PATH).join(""))
+      categories = @reporter.category_list *params
+      categories.each do |category|
+        cat_expenses = @filter.in_category category, *params
+        upper_cat.keys.each do |key|
+          if upper_cat[key].include? category
+            cat_at = upper_cat[key].find_index category
+            upper_cat[key][cat_at] = "#{category}:#{@reporter.sum_by_cat(cat_expenses, category)}"
+          end
+        end
+      end
+      puts upper_cat
     when "--list-by-cat", "-cl"
       categories = @reporter.category_list *params
       categories.each do |category|
@@ -34,6 +49,10 @@ class ReporterRunner
     else
       puts @reporter.print_report *params
     end
+  end
+
+  def load aStream
+    instance_eval aStream
   end
 
   def parse_run_option(argv)
