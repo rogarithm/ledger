@@ -19,6 +19,8 @@ class ReporterRunner
     option_name, params = @option[0], @option[1..-1]
 
     case option_name
+    when "--sum", "-s"
+      puts @reporter.compute_total_expense *params
     when "--sum-by-cat", "-cs"
       categories = @reporter.category_list *params
       sums = []
