@@ -21,50 +21,58 @@ RSpec.describe ExpenseReporter, "expense reporter" do
 
   it "computes sum of all expense from 1 day" do
     expense_list = read_expense_list(
-      ["4/2,4100,아침.맥모닝", "4/2,1000,여가.네이버 시리즈"]
+      ["4/2,4,b.m", "4/2,1,v.ns"]
     )
 
-    expect(@rpt.compute_total_expense expense_list).to eq(5100)
+    expect(@rpt.compute_total_expense expense_list).to eq(5)
   end
 
   it "computes sum of all expense from more than 2 days" do
     expense_list = read_expense_list(
-      ["4/2,4100,아침.맥모닝", "4/3,1000,커피"]
+      ["4/2,4,b.m", "4/3,1,c"]
     )
 
-    expect(@rpt.compute_total_expense expense_list).to eq(5100)
+    expect(@rpt.compute_total_expense expense_list).to eq(5)
   end
 
   it "prints expense list" do
     expense_list = read_expense_list(
-      ["4/2,4100,아침.맥모닝", "4/2,1000,커피"]
+      ["4/2,4,b.m", "4/2,1,c"]
     )
 
     expect(@rpt.print_report expense_list).to eq(
-      "2024-04-02 | 4100 | 아침 | 맥모닝\n2024-04-02 | 1000 | 커피 | "
+      "2024-04-02 | 4 | b | m\n2024-04-02 | 1 | c | "
     )
   end
 
   it "can collect all categories in ledger" do
     expense_list = read_expense_list(
-      ["5/1,11000,생필품.파스", "5/1,10000,식사.육장정",
-       "5/1,4300,커피.프로스퍼", "5/5,9000,약", "5/5,18260,책", "5/5,76500,신발"]
+      [
+        "5/1,11,living.p",
+        "5/1,10,meal.y",
+        "5/1,4,coffee.p",
+        "5/5,9,medicine",
+        "5/5,18,book",
+        "5/5,76,shoe"
+      ]
     )
 
     expect(@rpt.category_list expense_list).to eq(
-      ["생필품", "식사", "커피", "약", "책", "신발"]
+      ["living", "meal", "coffee", "medicine", "book", "shoe"]
     )
   end
 
   it "don't collect same category twice" do
     expense_list = read_expense_list(
-      ["5/1,11000,생필품.파스", "5/1,10000,식사.육장정",
-       "5/1,4300,커피.프로스퍼", "5/5,9000,약", "5/5,18260,책", "5/5,76500,신발",
-       "5/6,10000,식사.육장정"]
+      [
+        "5/1,10,meal.y",
+        "5/1,4,cof.p",
+        "5/6,10,meal.y"
+      ]
     )
 
     expect(@rpt.category_list expense_list).to eq(
-      ["생필품", "식사", "커피", "약", "책", "신발"]
+      ["meal", "cof"]
     )
   end
 end
