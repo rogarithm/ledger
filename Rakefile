@@ -1,10 +1,12 @@
 require 'rake/clean'
+require_relative "./lib/ledger/preproc"
 
 namespace :rpt do
   #desc 'run all specs and tests'
   #task :all => [:token, :parser, :generator, :concern, :file] do
   #end
 
+  #usage: rake rpt:all[2024_7]
   desc 'computes all'
   task :all, [:month, :ledger] do |task, args|
     month = args[:month]
@@ -21,4 +23,15 @@ namespace :rpt do
     puts "saving: #{saving}"
     puts fix + income + var + saving
   end
+end
+
+task :x do
+  pp = Lgr::Preproc.new
+  src_path = File.join(File.dirname(__FILE__), *%w[.. ledger source t_2024_8])
+  ignore_acc_n_emp_lines = Lgr::Ledger.new(File.read(src_path))
+                                      .ignore_account_lines
+                                      .ignore_empty_lines
+  x = pp.split_by_exp_type(ignore_acc_n_emp_lines)
+  p x
+  pp.make(x, "../../ledger/x")
 end
