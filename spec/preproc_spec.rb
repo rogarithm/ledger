@@ -1,0 +1,63 @@
+require_relative "../lib/ledger/preproc"
+require_relative "./helper/spec_helper"
+
+describe Lgr::Preproc do
+  RSpec.configure do |config|
+    config.filter_run_when_matching(focus: true)
+    config.example_status_persistence_file_path = 'spec/pass_fail_history'
+  end
+
+  TEST_DATA_DIR = File.join(File.dirname(__FILE__), *%w[data])
+
+  before(:each) do
+    @pp = Lgr::Preproc.new
+  end
+
+  it "계좌명을 지운다" do
+    src_path = File.join(TEST_DATA_DIR, *%w[before remove_account])
+
+    rm_acc = Lgr::Ledger.new(File.read(src_path)).ignore_account_lines
+    rm_acc.split("\n").each do |l|
+      expect(l).to match(/^\s+.*/)
+    end
+  end
+
+  it "지출 성격과 날짜를 기준으로 지출 내역을 모은다" do
+    src_path_sp = File.join(TEST_DATA_DIR, *%w[before group_by_exp_type_simple])
+
+    mid_res_sp = {:fix_exp => {"8/5" => ["7,b"], "8/26" => ["3,c"]}}
+    expect(@pp.group_by_exp_type(File.read(src_path_sp))).to eq(mid_res_sp)
+
+    res_path_sp = File.join(TEST_DATA_DIR, *%w[after group_by_exp_type_simple])
+    expected_sp = File.read(res_path_sp)
+    expect(@pp.back2ledger_form(mid_res_sp)).to eq_ignore_ws(expected_sp)
+
+    src_path_cpx = File.join(TEST_DATA_DIR, *%w[before group_by_exp_type_complex])
+    mid_res_cpx = @pp.group_by_exp_type(File.read(src_path_cpx))
+
+    res_path_cpx = File.join(TEST_DATA_DIR, *%w[after group_by_exp_type_complex])
+    expected_cpx = File.read(res_path_cpx)
+    expect(@pp.back2ledger_form(mid_res_cpx)).to eq_ignore_ws(expected_cpx)
+  end
+
+  it "지출 성격마다 분리한다" do
+    res = @pp.split_by_exp_type(
+      "fix_exp\n8/5\n7,b\n8/26\n3,c\n"
+    )
+
+    expect(res).to eq({
+      "fix_exp:2024_8" => "8/5\n7,b\n8/26\n3,c"
+    })
+  end
+
+  it "지출 성격별로 저장한다" do
+    ledgers = {
+      "after/split/fix_exp:2023_8" => "8/5\n7,b\n8/26\n3,c\n",
+      "after/split/income:2023_8" => "8/1\n-70,b\n8/2\n-30,c\n"
+    }
+
+    @pp.make(ledgers, "../spec/data", false)
+    expect(File.exist?(File.join(TEST_DATA_DIR, "after/split/fix_exp/2023_8"))).to be true
+    expect(File.exist?(File.join(TEST_DATA_DIR, "after/split/income/2023_8"))).to be true
+  end
+end
