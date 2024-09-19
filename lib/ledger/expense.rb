@@ -6,7 +6,7 @@ module Lgr
       at, amount, category = data.split(",").map! {|x| x.strip}
       category, detail = category.split(".").map! {|x| x.strip}
       month, day = at.split("/")
-      @at = Time.new(2024, month, day)
+      @at = Time.new(Time.new.year, month, day)
       @amount = amount.to_i
       @category = category
       @detail = detail

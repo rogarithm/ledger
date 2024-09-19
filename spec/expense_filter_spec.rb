@@ -1,4 +1,5 @@
 require_relative "../lib/ledger/expense"
+require_relative "../lib/ledger/expenselist"
 require_relative "../lib/ledger/expense_filter"
 
 require_relative "../spec/helper/spec_helper"
@@ -20,7 +21,7 @@ RSpec.describe Lgr::ExpenseFilter, "expense filter" do
   end
 
   it "list expense from start date to end date" do
-    expense_list = read_expense_list(
+    expense_list = Lgr::ExpenseList.new(
       ["4/4,1,x.y", "4/6,1,c"]
     )
 
@@ -30,7 +31,7 @@ RSpec.describe Lgr::ExpenseFilter, "expense filter" do
   end
 
   it "shows message when no expense in given range" do
-    expense_list = read_expense_list(
+    expense_list = Lgr::ExpenseList.new(
       ["4/2,4,x.y"]
     )
 
@@ -40,7 +41,7 @@ RSpec.describe Lgr::ExpenseFilter, "expense filter" do
   end
 
   it "filter expense higher than specific amount" do
-    expense_list = read_expense_list(
+    expense_list = Lgr::ExpenseList.new(
       ["4/4,1,x", "4/6,2,c", "4/6,4,c"]
     )
 
@@ -50,7 +51,7 @@ RSpec.describe Lgr::ExpenseFilter, "expense filter" do
   end
 
   it "filter expense in specific category" do
-    expense_list = read_expense_list(
+    expense_list = Lgr::ExpenseList.new(
       ["4/4,1,v", "4/6,2,c", "4/6,4,c"]
     )
 
