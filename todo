@@ -1,3 +1,5 @@
+pipe_runner, reporter_runner의 expense_filter와 expense_reporter에 대한 의존성 제거하고 expense_filter와 expense_reporter 삭제하기
+
 자동화할 수 있는 부분은 자동화하되, 어려운 부분은 애써 구현하기보단 수동으로 작업하기
 
 스크립트로 하고자 하는 것
