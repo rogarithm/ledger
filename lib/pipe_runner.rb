@@ -1,13 +1,13 @@
-require_relative "./expense"
-require_relative "./expense_reader"
-require_relative "./expense_filter"
+require_relative "./ledger/expense"
+require_relative "./ledger/expense_reader"
+require_relative "./ledger/expense_filter"
 
 class PipeRunner
   attr_reader :reader, :filter, :option
 
   def initialize(argv)
-    @reader = ExpenseReader.new
-    @filter = ExpenseFilter.new
+    @reader = Lgr::ExpenseReader.new
+    @filter = Lgr::ExpenseFilter.new
     @option = parse_run_option(argv)
   end
 

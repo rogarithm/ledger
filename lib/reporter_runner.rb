@@ -1,7 +1,7 @@
-require_relative "./expense"
-require_relative "./expense_reader"
-require_relative "./expense_reporter"
-require_relative "./expense_filter"
+require_relative "./ledger/expense"
+require_relative "./ledger/expense_reader"
+require_relative "./ledger/expense_reporter"
+require_relative "./ledger/expense_filter"
 
 class ReporterRunner
   UPPER_CAT_PATH = "./cat"
@@ -9,9 +9,9 @@ class ReporterRunner
   attr_reader :reader, :reporter, :filter, :option
 
   def initialize(argv)
-    @reader = ExpenseReader.new
-    @reporter = ExpenseReporter.new
-    @filter = ExpenseFilter.new
+    @reader = Lgr::ExpenseReader.new
+    @reporter = Lgr::ExpenseReporter.new
+    @filter = Lgr::ExpenseFilter.new
     @option = parse_run_option(argv)
   end
 

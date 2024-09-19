@@ -1,5 +1,5 @@
-require_relative "../lib/expense"
-require_relative "../lib/expense_filter"
+require_relative "../lib/ledger/expense"
+require_relative "../lib/ledger/expense_filter"
 
 require_relative "../spec/helper/spec_helper"
 
@@ -8,15 +8,15 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = 'spec/pass_fail_history'
 end
 
-RSpec.describe ExpenseFilter, "expense filter" do
+RSpec.describe Lgr::ExpenseFilter, "expense filter" do
   def read_expense_list txt_expense_list
     txt_expense_list.inject([]) do |expense_list, txt_expense|
-      expense_list << Expense.new(txt_expense)
+      expense_list << Lgr::Expense.new(txt_expense)
     end
   end
 
   before(:each) do
-    @ftr = ExpenseFilter.new
+    @ftr = Lgr::ExpenseFilter.new
   end
 
   it "list expense from start date to end date" do
@@ -25,7 +25,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
     )
 
     expect(@ftr.list_in_range("4/3", "4/5", expense_list)[0]).to eq_expense(
-      Expense.new "4/4,1,x.y"
+      Lgr::Expense.new "4/4,1,x.y"
     )
   end
 
@@ -45,7 +45,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
     )
 
     expect(@ftr.eg_than_amount(2, expense_list)).to eq_expenses(
-      [Expense.new("4/6,2,c"), Expense.new("4/6,4,c")]
+      [Lgr::Expense.new("4/6,2,c"), Lgr::Expense.new("4/6,4,c")]
     )
   end
 
@@ -55,7 +55,7 @@ RSpec.describe ExpenseFilter, "expense filter" do
     )
 
     expect(@ftr.in_category("c", expense_list)).to eq_expenses(
-      [Expense.new("4/6,2,c"), Expense.new("4/6,4,c")]
+      [Lgr::Expense.new("4/6,2,c"), Lgr::Expense.new("4/6,4,c")]
     )
   end
 end

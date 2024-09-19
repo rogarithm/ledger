@@ -1,5 +1,5 @@
-require_relative "../lib/expense"
-require_relative "../lib/expense_reporter"
+require_relative "../lib/ledger/expense"
+require_relative "../lib/ledger/expense_reporter"
 
 require_relative "../spec/helper/spec_helper"
 
@@ -8,15 +8,15 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = 'spec/pass_fail_history'
 end
 
-RSpec.describe ExpenseReporter, "expense reporter" do
+RSpec.describe Lgr::ExpenseReporter, "expense reporter" do
   def read_expense_list txt_expense_list
     txt_expense_list.inject([]) do |expense_list, txt_expense|
-      expense_list << Expense.new(txt_expense)
+      expense_list << Lgr::Expense.new(txt_expense)
     end
   end
 
   before(:each) do
-    @rpt = ExpenseReporter.new
+    @rpt = Lgr::ExpenseReporter.new
   end
 
   it "computes sum of all expense from 1 day" do
