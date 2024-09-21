@@ -72,7 +72,7 @@ module Lgr
       result = {}
 
       group_by_exp_type(source).each do |exp_type, date_n_exps|
-        ledger_nm = [Time.new.year, date_n_exps.keys[0].split("/")[0]].join("_")
+        ledger_nm = [Time.new.year, find_month(date_n_exps)].join("_")
         exps_in_type = back2ledger_form({ exp_type => date_n_exps }, "")
                          .split("\n")
                          .filter! { |l| l !~ /^\s*[fix_exp|var_exp|income|saving]/ }
@@ -81,6 +81,12 @@ module Lgr
       end
 
       result
+    end
+
+    def find_month(date_n_exps)
+      months = date_n_exps.keys.map {|md| md.split("/")[0].to_i}
+                          .reverse
+      months[0].to_s
     end
 
     def make(ledgers, middle_path="", dry_run=false)

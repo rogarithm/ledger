@@ -40,6 +40,11 @@ describe Lgr::Preproc do
     expect(@pp.back2ledger_form(mid_res_cpx)).to eq_ignore_ws(expected_cpx)
   end
 
+  it "지출 월을 알아낼 수 있다" do
+    date_n_exps = {"7/31"=>["-20,i"], "8/9"=>["-7,tc"], "8/26"=>["-8,cb"], "8/12"=>["-7,c"]}
+    expect(@pp.find_month(date_n_exps)).to eq("8")
+  end
+
   it "지출 성격마다 분리한다" do
     res = @pp.split_by_exp_type(
       "fix_exp\n8/5\n7,b\n8/26\n3,c\n"
