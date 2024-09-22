@@ -28,8 +28,8 @@ module Lgr
   end
 
   class Preproc
-    def group_by_exp_type(source)
-      lines = source.split("\n")
+    def group_by_exp_type(ledger)
+      lines = ledger.split("\n")
 
       groups = {}
       exp_type = ""
@@ -52,26 +52,26 @@ module Lgr
     end
 
     def back2ledger_form(groups, padding=" ", ignore_exp_type: false)
-      result = ""
+      ledger = ""
 
       groups.each do |exp_type, date_n_exps|
         date_n_exps = date_n_exps.sort_by do |date, ignore|
           Time.new(Time.new.year, *date.split("/").map(&:to_i))
         end.to_h
-        result << "#{exp_type}\n" if ignore_exp_type == false
+        ledger << "#{exp_type}\n" if ignore_exp_type == false
         date_n_exps.each do |date, exps|
-          result << "#{padding}#{date}\n"
-          exps.each { |exp| result << "#{padding}#{padding}#{exp}\n" }
+          ledger << "#{padding}#{date}\n"
+          exps.each { |exp| ledger << "#{padding}#{padding}#{exp}\n" }
         end
       end
 
-      result
+      Lgr::Ledger.new(ledger)
     end
 
-    def split_by_exp_type(source)
+    def split_by_exp_type(ledger)
       result = {}
 
-      group_by_exp_type(source).each do |exp_type, date_n_exps|
+      group_by_exp_type(ledger).each do |exp_type, date_n_exps|
         ledger_nm = [Time.new.year, find_month(date_n_exps)].join("_")
         exps_in_type = back2ledger_form({ exp_type => date_n_exps }, "")
                          .split("\n")
