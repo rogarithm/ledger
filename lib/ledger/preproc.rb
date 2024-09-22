@@ -51,14 +51,14 @@ module Lgr
       groups
     end
 
-    def back2ledger_form(groups, padding=" ")
+    def back2ledger_form(groups, padding=" ", ignore_exp_type: false)
       result = ""
 
       groups.each do |exp_type, date_n_exps|
         date_n_exps = date_n_exps.sort_by do |date, ignore|
           Time.new(Time.new.year, *date.split("/").map(&:to_i))
         end.to_h
-        result << "#{exp_type}\n"
+        result << "#{exp_type}\n" if ignore_exp_type == false
         date_n_exps.each do |date, exps|
           result << "#{padding}#{date}\n"
           exps.each { |exp| result << "#{padding}#{padding}#{exp}\n" }
@@ -98,16 +98,34 @@ module Lgr
         return
       end
 
-      ledgers.each do |where, exps|
+      ledgers.each do |where, date_n_exps|
         exp_type, ledger_nm = where.split(":")
         full_path = File.join(base_dir, exp_type)
 
         FileUtils.mkdir_p(full_path)
 
         File.open(File.join(full_path, ledger_nm), "w") do |f|
-          f.write(exps)
+          f.write(pretty_format(date_n_exps))
         end
       end
+    end
+
+    def pretty_format(date_n_exps, dummy_exp_type: "x")
+      exp_type = dummy_exp_type
+      groups = {}
+      groups[exp_type] = {}
+
+      date = ""
+      date_n_exps.split("\n").each do |l|
+        if l =~ /^\s*\d+\/\d+$/
+          date = l.strip
+          groups[exp_type][date] ||= []
+          next
+        end
+        groups[exp_type][date] << l.strip
+      end
+
+      back2ledger_form(groups, ignore_exp_type: true)
     end
   end
 end

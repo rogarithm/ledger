@@ -15,6 +15,7 @@
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 require_relative './matcher/expense_matcher'
 require_relative './matcher/ws_matcher'
+require_relative './matcher/format_matcher'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

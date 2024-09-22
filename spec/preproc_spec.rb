@@ -55,6 +55,16 @@ describe Lgr::Preproc do
     })
   end
 
+  it "보기 편하게 지출 내역을 포맷팅한다" do
+    date_n_exps_list = ["8/5\n7,b\n8/26\n3,c\n", "8/1\n-70,b\n8/2\n-30,c\n"]
+    pretty_date_n_exps_list = []
+    date_n_exps_list.each do |date_n_exps|
+      pretty_date_n_exps_list << @pp.pretty_format(date_n_exps)
+    end
+
+    expect(pretty_date_n_exps_list).to pretty_formatted
+  end
+
   it "지출 성격별로 저장한다" do
     ledgers = {
       "after/split/fix_exp:2023_8" => "8/5\n7,b\n8/26\n3,c\n",
