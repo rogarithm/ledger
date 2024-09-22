@@ -35,7 +35,7 @@ module Lgr
       exp_type = ""
       date = ""
       lines.each do |l|
-        if l =~ /^\s*[fix_exp|var_exp|income|saving]/
+        if l =~ /^\s*(fix_exp|var_exp|income|saving|x)/
           exp_type = l.strip.to_sym
           groups[exp_type] ||= {}
           next
@@ -111,20 +111,8 @@ module Lgr
     end
 
     def pretty_format(date_n_exps, dummy_exp_type: "x")
-      exp_type = dummy_exp_type
-      groups = {}
-      groups[exp_type] = {}
-
-      date = ""
-      date_n_exps.split("\n").each do |l|
-        if l =~ /^\s*\d+\/\d+$/
-          date = l.strip
-          groups[exp_type][date] ||= []
-          next
-        end
-        groups[exp_type][date] << l.strip
-      end
-
+      ledger = "#{dummy_exp_type}\n" << date_n_exps
+      groups = group_by_exp_type(ledger)
       back2ledger_form(groups, ignore_exp_type: true)
     end
   end
