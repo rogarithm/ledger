@@ -32,20 +32,21 @@ module Lgr
       lines = ledger.split("\n")
 
       groups = {}
-      exp_type = ""
-      date = ""
+      acc, exp_type, date = "", "", ""
       lines.each do |l|
-        if l =~ /^\s*(fix_exp|var_exp|income|saving|x)/
+        case
+        when account?(l) then
+          acc = l.strip
+        when exp_type?(l) then
           exp_type = l.strip.to_sym
           groups[exp_type] ||= {}
-          next
-        end
-        if l =~ /^\s*\d+\/\d+$/
+        when date?(l) then
           date = l.strip
           groups[exp_type][date] ||= []
-          next
+        else
+          exp = acc == "" ? l.strip : l.strip << "," << acc
+          groups[exp_type][date] << exp
         end
-        groups[exp_type][date] << l.strip
       end
 
       groups
@@ -114,6 +115,20 @@ module Lgr
       ledger = "#{dummy_exp_type}\n" << date_n_exps
       groups = group_by_exp_type(ledger)
       back2ledger_form(groups, ignore_exp_type: true)
+    end
+
+    private
+
+    def date?(l)
+      l =~ /^\s*\d+\/\d+$/
+    end
+
+    def exp_type?(l)
+      l =~ /^\s*(fix_exp|var_exp|income|saving|x)/
+    end
+
+    def account?(l)
+      l =~ /^\s*(shinhan|kakao|mirae|toss)/
     end
   end
 end
