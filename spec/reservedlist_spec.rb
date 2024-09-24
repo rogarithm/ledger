@@ -21,7 +21,7 @@ describe Lgr::Preproc do
     p reservedlist.convert2ledger(8)
   end
 
-  fit "예약 지출 내역을 가계부에 추가할 수 있다" do
+  it "예약 지출 내역을 가계부에 추가할 수 있다" do
     reservedlist = Lgr::ReservedList.new(
       "i:x/5:5:s\nj:x/5:30:m\nz:x/26:2:s"
     )
