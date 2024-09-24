@@ -114,7 +114,7 @@ module Lgr
     def pretty_format(date_n_exps, dummy_exp_type: "x")
       ledger = "#{dummy_exp_type}\n" << date_n_exps
       groups = group_by_exp_type(ledger)
-      back2ledger_form(groups, ignore_exp_type: true)
+      back2ledger_form(groups, "", ignore_exp_type: true)
     end
 
     private

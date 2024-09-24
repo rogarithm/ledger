@@ -28,10 +28,8 @@ end
 task :x do
   pp = Lgr::Preproc.new
   src_path = File.join(File.dirname(__FILE__), *%w[.. ledger source t_2024_8])
-  ignore_acc_n_emp_lines = Lgr::Ledger.new(File.read(src_path))
-                                      .ignore_account_lines
+  ignore_emp_lines = Lgr::Ledger.new(File.read(src_path))
                                       .ignore_empty_lines
-  x = pp.split_by_exp_type(ignore_acc_n_emp_lines)
-  p x
+  x = pp.split_by_exp_type(ignore_emp_lines)
   pp.make(x, "../../ledger/x")
 end
