@@ -52,17 +52,20 @@ module Lgr
       groups
     end
 
-    def back2ledger_form(groups, padding=" ", ignore_exp_type: false)
+    def back2ledger_form(groups, padding: " ", extra_paddings: {}, ignore_exp_type: false)
       ledger = ""
+      exp_type_pad = extra_paddings[:exp_type] || ""
+      date_pad = extra_paddings[:date] || padding
+      exp_pad = extra_paddings[:exp] || padding + padding
 
       groups.each do |exp_type, date_n_exps|
         date_n_exps = date_n_exps.sort_by do |date, ignore|
           Time.new(Time.new.year, *date.split("/").map(&:to_i))
         end.to_h
-        ledger << "#{exp_type}\n" if ignore_exp_type == false
+        ledger << "#{exp_type_pad}#{exp_type}\n" if ignore_exp_type == false
         date_n_exps.each do |date, exps|
-          ledger << "#{padding}#{date}\n"
-          exps.each { |exp| ledger << "#{padding}#{padding}#{exp}\n" }
+          ledger << "#{date_pad}#{date}\n"
+          exps.each { |exp| ledger << "#{exp_pad}#{exp}\n" }
         end
       end
 
@@ -74,7 +77,7 @@ module Lgr
 
       group_by_exp_type(ledger).each do |exp_type, date_n_exps|
         ledger_nm = [Time.new.year, find_month(date_n_exps)].join("_")
-        exps_in_type = back2ledger_form({ exp_type => date_n_exps }, "")
+        exps_in_type = back2ledger_form({ exp_type => date_n_exps }, padding: "")
                          .split("\n")
                          .filter! { |l| l !~ /^\s*[fix_exp|var_exp|income|saving]/ }
                          .join("\n")
@@ -114,7 +117,7 @@ module Lgr
     def pretty_format(date_n_exps, dummy_exp_type: "x")
       ledger = "#{dummy_exp_type}\n" << date_n_exps
       groups = group_by_exp_type(ledger)
-      back2ledger_form(groups, "", ignore_exp_type: true)
+      back2ledger_form(groups, padding: " ", extra_paddings: {:date => "", :exp => " "}, ignore_exp_type: true)
     end
 
     private
