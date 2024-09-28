@@ -26,7 +26,7 @@ RSpec.describe Lgr::Expense, "expense" do
     ))
   end
 
-  it "format amount" do
+  it "지출액을 포맷팅할 수 있다" do
     e1 = Lgr::Expense.new("4/2,500,c")
     expect(e1.format_amount).to eq("500")
 
@@ -37,7 +37,7 @@ RSpec.describe Lgr::Expense, "expense" do
     expect(e3.format_amount).to eq("120,800")
   end
 
-  it "undo format amount" do
+  it "지출액 포맷팅을 되돌릴 수 있다" do
     e_x = Lgr::Expense.new("4/2,500,c")
 
     expect(e_x.unformat_amount("500")).to eq("500")

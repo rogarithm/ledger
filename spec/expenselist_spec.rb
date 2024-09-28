@@ -10,7 +10,7 @@ end
 
 RSpec.describe Lgr::ExpenseList, "expense list" do
   context "filterable" do
-    it "list expense from start date to end date" do
+    it "주어진 두 날짜 사이의 지출을 필터링할 수 있다" do
       exp_list = Lgr::ExpenseList.new(
         ["4/4,1,x.y", "4/6,1,c"]
       )
@@ -20,7 +20,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       )
     end
 
-    it "shows message when no expense in given range" do
+    it "주어진 두 날짜 사이에 지출이 없을 경우를 처리할 수 있다" do
       exp_list = Lgr::ExpenseList.new(
         ["4/2,4,x.y"]
       )
@@ -30,7 +30,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       )
     end
 
-    it "filter expense higher than specific amount" do
+    it "주어진 금액보다 큰 지출액을 갖는 지출을 필터링할 수 있다" do
       exp_list = Lgr::ExpenseList.new(
         ["4/4,1,x", "4/6,2,c", "4/6,4,c"]
       )
@@ -40,7 +40,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       )
     end
 
-    it "filter expense in specific category" do
+    it "특정 카테고리의 지출을 필터링할 수 있다" do
       exp_list = Lgr::ExpenseList.new(
         ["4/4,1,v", "4/6,2,c", "4/6,4,c"]
       )
@@ -52,7 +52,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
   end
 
   context "reportable" do
-    it "computes sum of all expense from 1 day" do
+    it "특정 일자의 모든 지출액 합을 계산할 수 있다" do
       expense_list = Lgr::ExpenseList.new(
         ["4/2,4,b.m", "4/2,1,v.ns"]
       )
@@ -60,7 +60,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       expect(expense_list.compute_total_expense).to eq(5)
     end
 
-    it "computes sum of all expense from more than 2 days" do
+    it "주어진 2일 이상 기간의 모든 지출액 합을 계산할 수 있다" do
       expense_list = Lgr::ExpenseList.new(
         ["4/2,4,b.m", "4/3,1,c"]
       )
@@ -68,7 +68,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       expect(expense_list.compute_total_expense).to eq(5)
     end
 
-    it "prints expense list" do
+    it "주어진 지출 목록을 출력할 수 있다" do
       expense_list = Lgr::ExpenseList.new(
         ["4/2,4,b.m", "4/2,1,c"]
       )
@@ -78,7 +78,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       )
     end
 
-    it "can collect all categories in ledger" do
+    it "가계부에 쓰인 모든 카테고리를 모을 수 있다" do
       expense_list = Lgr::ExpenseList.new(
         [
           "5/1,11,living.p",
@@ -95,7 +95,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
       )
     end
 
-    it "don't collect same category twice" do
+    it "동일한 카테고리는 중복으로 모으지 않는다" do
       expense_list = Lgr::ExpenseList.new(
         [
           "5/1,10,meal.y",

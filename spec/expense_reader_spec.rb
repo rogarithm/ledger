@@ -10,7 +10,7 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
     end
   end
 
-  it "convert expenses of 1 day back to the form equal to db" do
+  it "1일치의 지출 기록을 데이터베이스에 저장되는 형태로 되돌릴 수 있다" do
     reader = Lgr::ExpenseReader.new
     expense_list = read_expense_list(
       ["4/2,4,b.m", "4/2,1,v.ns"]
@@ -21,7 +21,7 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
     )
   end
 
-  it "convert expenses of 2 days back to the form equal to db" do
+  it "2일치의 지출 기록을 데이터베이스에 저장되는 형태로 되돌릴 수 있다" do
     reader = Lgr::ExpenseReader.new
     expense_list = read_expense_list(
       ["4/2,4,b.m", "4/2,1,v.ns",
@@ -33,7 +33,7 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
     )
   end
 
-  it "from plain text file" do
+  it "일반 텍스트 포맷 가계부로부터 지출 정보를 가져올 수 있다" do
     raw_expense_list = <<-file_content
     4/2
     4,b,m
@@ -49,7 +49,7 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
     expect(expense_list[2]).to eq_expense(Lgr::Expense.new("4/2,1,c"))
   end
 
-  it "when some field has additional whitespaces" do
+  it "불필요한 빈 칸이 있는 경우 지출 정보를 가져올 수 있다" do
     raw_expense_list = <<-file_content
     4/2
     4,b.m
