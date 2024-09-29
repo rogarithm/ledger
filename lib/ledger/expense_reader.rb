@@ -12,7 +12,7 @@ module Lgr
         elsif line =~ /^$/
           next
         else
-          expense = Expense.new(current_date.strip + "," + line.strip)
+          expense = current_date.strip + "," + line.split(",").map(&:strip).join(",")
           expenses << expense
         end
       end

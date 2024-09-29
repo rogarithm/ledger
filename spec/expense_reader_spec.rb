@@ -44,9 +44,9 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
     reader = Lgr::ExpenseReader.new
     expense_list = reader.read_expense_list(raw_expense_list)
 
-    expect(expense_list[0]).to eq_expense(Lgr::Expense.new("4/2,4,b,m"))
-    expect(expense_list[1]).to eq_expense(Lgr::Expense.new("4/2,1,v,ns"))
-    expect(expense_list[2]).to eq_expense(Lgr::Expense.new("4/2,1,c"))
+    expect(expense_list[0]).to eq("4/2,4,b,m")
+    expect(expense_list[1]).to eq("4/2,1,v,ns")
+    expect(expense_list[2]).to eq("4/2,1,c")
   end
 
   it "불필요한 빈 칸이 있는 경우 지출 정보를 가져올 수 있다" do
@@ -55,17 +55,17 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
     4,b.m
     1,v.ns
     1, c.m
-    2, c . pb
-    2,c .sb
+    2, c.pb
+    2,c.sb
     file_content
 
     reader = Lgr::ExpenseReader.new
     expense_list = reader.read_expense_list(raw_expense_list)
 
-    expect(expense_list[0]).to eq_expense(Lgr::Expense.new("4/2,4,b.m"))
-    expect(expense_list[1]).to eq_expense(Lgr::Expense.new("4/2,1,v.ns"))
-    expect(expense_list[2]).to eq_expense(Lgr::Expense.new("4/2,1,c.m"))
-    expect(expense_list[3]).to eq_expense(Lgr::Expense.new("4/2,2,c.pb"))
-    expect(expense_list[4]).to eq_expense(Lgr::Expense.new("4/2,2,c.sb"))
+    expect(expense_list[0]).to eq("4/2,4,b.m")
+    expect(expense_list[1]).to eq("4/2,1,v.ns")
+    expect(expense_list[2]).to eq("4/2,1,c.m")
+    expect(expense_list[3]).to eq("4/2,2,c.pb")
+    expect(expense_list[4]).to eq("4/2,2,c.sb")
   end
 end
