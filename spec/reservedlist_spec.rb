@@ -18,7 +18,9 @@ describe Lgr::Preproc do
     reservedlist = Lgr::ReservedList.new(
       "i:x/5:5:s\nj:x/5:30:m\nz:x/26:2:s"
     )
-    p reservedlist.convert2ledger(8)
+    expect(reservedlist.convert2ledger(8)).to eq(
+      ["s\n saving\n  8/5\n  5,i\n", "m\n saving\n  8/5\n  30,j\n", "s\n saving\n  8/26\n  2,z\n"]
+    )
   end
 
   it "예약 지출 내역을 가계부에 추가할 수 있다" do
