@@ -28,7 +28,7 @@ module Lgr
   end
 
   class Preproc
-    def group_by_exp_type(ledger)
+    def group_by_exp_type(ledger, from_csv: false)
       lines = ledger.split("\n")
 
       groups = {}
@@ -40,6 +40,11 @@ module Lgr
         when exp_type?(l) then
           exp_type = l.strip.to_sym
           groups[exp_type] ||= {}
+        when from_csv
+          date, exp = l.split(",")[0].strip, l.split(",")[1..-1].join(",").strip
+          groups[exp_type][date] ||= []
+          exp = acc == "" ? exp : exp << "," << acc
+          groups[exp_type][date] << exp
         when date?(l) then
           date = l.strip
           groups[exp_type][date] ||= []
