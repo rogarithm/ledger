@@ -91,6 +91,17 @@ describe Lgr::Preproc do
     })
   end
 
+  it "csv 형식 가계부를 지출 성격마다 분리한다" do
+    res = @pp.split_by_exp_type(
+      "fix_exp\n8/5,7,b\n8/26,3,c\n",
+      from_csv: true
+    )
+
+    expect(res).to eq({
+      "fix_exp:2024_8" => "8/5\n7,b\n8/26\n3,c"
+    })
+  end
+
   it "보기 편하게 지출 내역을 포맷팅한다" do
     date_n_exps_list = ["8/5\n7,b\n8/26\n3,c\n", "8/1\n-70,b\n8/2\n-30,c\n"]
     pretty_date_n_exps_list = []

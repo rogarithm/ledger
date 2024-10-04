@@ -77,10 +77,10 @@ module Lgr
       Lgr::Ledger.new(ledger)
     end
 
-    def split_by_exp_type(ledger)
+    def split_by_exp_type(ledger, from_csv: false)
       result = {}
 
-      group_by_exp_type(ledger).each do |exp_type, date_n_exps|
+      group_by_exp_type(ledger, from_csv: from_csv).each do |exp_type, date_n_exps|
         ledger_nm = [Time.new.year, find_month(date_n_exps)].join("_")
         exps_in_type = back2ledger_form({ exp_type => date_n_exps }, padding: "")
                          .split("\n")
@@ -136,7 +136,7 @@ module Lgr
     end
 
     def account?(l)
-      l =~ /^\s*(shinhan|kakao|mirae|toss)/
+      l =~ /^\s*(shinhan|kakao|mirae|toss|kakao-pay)/
     end
   end
 end
