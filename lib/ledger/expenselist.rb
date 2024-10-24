@@ -45,7 +45,7 @@ module Lgr
         return "no expense for given category!"
       end
 
-      filtered_expenses
+      Lgr::ExpenseList.from_exps(filtered_expenses)
     end
 
     def list_in_range from, to
@@ -60,13 +60,14 @@ module Lgr
         return "no matching expense for given range!"
       end
 
-      expenses_in_range
+      Lgr::ExpenseList.from_exps(expenses_in_range)
     end
 
     def sort_by_amt(order: :desc, len: self.size)
-      self.sort_by { |exp| exp.amount }
+      sorted = self.sort_by { |exp| exp.amount }
                    .reverse!
                    .take(len)
+      Lgr::ExpenseList.from_exps(sorted)
     end
 
     def eg_than_amount amount
@@ -76,7 +77,7 @@ module Lgr
         return "no expense that has higher or equal amount for given amount!"
       end
 
-      filtered_expenses
+      Lgr::ExpenseList.from_exps(filtered_expenses)
     end
 
     def le_than_amount amount
@@ -86,7 +87,7 @@ module Lgr
         return "no expense that has less or equal amount for given amount!"
       end
 
-      filtered_expenses
+      Lgr::ExpenseList.from_exps(filtered_expenses)
     end
   end
 
@@ -100,6 +101,10 @@ module Lgr
           res << Lgr::Expense.new(exp)
         end
       )
+    end
+
+    def self.from_exps exps
+      self.new([]).concat(exps)
     end
   end
 end
