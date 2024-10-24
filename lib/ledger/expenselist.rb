@@ -63,6 +63,12 @@ module Lgr
       expenses_in_range
     end
 
+    def sort_by_amt(order: :desc, len: self.size)
+      self.sort_by { |exp| exp.amount }
+                   .reverse!
+                   .take(len)
+    end
+
     def eg_than_amount amount
       filtered_expenses = self.select {|expense| expense.amount >= amount}
 

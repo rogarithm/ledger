@@ -108,5 +108,23 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ["meal", "cof"]
       )
     end
+
+    it "금액이 큰 순서대로 정렬할 수 있다" do
+      expense_list = Lgr::ExpenseList.new(
+        [
+          "5/1,11,living.p",
+          "5/1,10,meal.y",
+          "5/1,4,coffee.p",
+          "5/5,9,medicine",
+          "5/5,18,book 5/5,76,shoe"
+        ]
+      )
+
+      expect(
+        expense_list.sort_by_amt.collect {|exp| exp.amount}
+      ).to eq(
+        [18, 11, 10, 9, 4]
+      )
+    end
   end
 end
