@@ -1,4 +1,5 @@
 require 'rake/clean'
+require 'csv'
 require_relative "./lib/ledger/preproc"
 require_relative "./lib/ledger/expense_reader"
 require_relative "./lib/ledger/expenselist"
@@ -39,4 +40,97 @@ task :prep, [:month] do |ignore, args|
                                       .ignore_empty_lines
   x = pp.split_by_exp_type(ignore_emp_lines, from_csv: true)
   pp.make(x, "../../ledger/dest")
+end
+
+task :rinse_kakao_csv, [:month] do |ignore, args|
+  input_file = File.join(File.dirname(__FILE__), *%W[.. ledger source raw 2024_#{args[:month]} kakao.csv])  # Replace with your input CSV file path
+  output_file = File.join(File.dirname(__FILE__), *%W[.. ledger source raw 2024_#{args[:month]} kakao_rinsed.csv])  # Replace with your desired output file path
+
+  CSV.open(output_file, 'w') do |csv|
+    csv << ['거래일시', '거래금액', '내용']
+
+    CSV.foreach(input_file, headers: true) do |row|
+      if !row['거래일시'] or !row['거래금액']
+        next
+      end
+
+      row['거래일시'] = row['거래일시'][5..-1].gsub('.', '/')
+
+      row['거래금액'] = row['거래금액'].gsub(',', '_')
+      if row['거래금액'].to_i < 0
+        row['거래금액'].sub!('-', '')
+      else
+        row['거래금액'] = "-#{row['거래금액']}"
+      end
+
+      csv << row.values_at('거래일시', '거래금액', '내용')
+    end
+  end
+
+  puts "CSV processing complete! Output saved to #{output_file}"
+end
+
+task :rinse_shinhan_csv, [:month] do |ignore, args|
+  input_file = File.join(File.dirname(__FILE__), *%W[.. ledger source raw 2024_#{args[:month]} shinhan.csv])  # Replace with your input CSV file path
+  output_file = File.join(File.dirname(__FILE__), *%W[.. ledger source raw 2024_#{args[:month]} shinhan_rinsed.csv])  # Replace with your desired output file path
+
+  CSV.open(output_file, 'w') do |csv|
+    # Define the new header with '출금(원)' changed to '금액' and without '입금(원)'
+    csv << ['거래일시', '거래금액', '내용']
+
+    # Read the input CSV
+    CSV.foreach(input_file, headers: true) do |row|
+      if !row['거래일자'] or !row['거래시간']
+        next
+      end
+
+      row['거래일자'] = row['거래일자'][5..9].gsub('-', '/')
+      row['거래일시'] = "#{row['거래일자']} #{row['거래시간']}"
+      # # 2. Remove unnecessary columns (third column: 적요 and eighth column: 거래점)
+      # row.delete('적요')
+      # row.delete('거래점')
+
+      # 3. Merge columns for expense/income handling
+      if row['출금(원)'].to_i > 0
+        row['거래금액'] = row['출금(원)']
+      elsif row['입금(원)'].to_i > 0
+        row['거래금액'] = "-#{row['입금(원)']}"
+      end
+
+      row['거래금액'] = row['거래금액'].gsub(',', '_')
+
+      csv << row.values_at('거래일시', '거래금액', '내용')
+    end
+  end
+
+  puts "CSV processing complete! Output saved to #{output_file}"
+end
+
+task :rinse_toss_csv, [:month] do |ignore, args|
+  input_file = File.join(File.dirname(__FILE__), *%W[.. ledger source raw 2024_#{args[:month]} toss.csv])  # Replace with your input CSV file path
+  output_file = File.join(File.dirname(__FILE__), *%W[.. ledger source raw 2024_#{args[:month]} toss_rinsed.csv])  # Replace with your desired output file path
+
+  CSV.open(output_file, 'w') do |csv|
+    csv << ['거래일시', '거래금액', '내용']
+
+    CSV.foreach(input_file, headers: true) do |row|
+      if !row['거래 일시']
+        next
+      end
+
+      row['거래일시'] = "#{row['거래 일시'][5..9].gsub('.', '/')}#{row['거래 일시'][10..-1].gsub('.', '/')}"
+
+      row['거래 금액'] = row['거래 금액'].gsub(',', '_')
+      if row['거래 금액'].to_i < 0
+        row['거래금액'] = row['거래 금액'].sub!('-', '')
+      else
+        row['거래금액'] = "-#{row['거래 금액']}"
+      end
+
+
+      csv << row.values_at('거래일시', '거래금액', '적요')
+    end
+  end
+
+  puts "CSV processing complete! Output saved to #{output_file}"
 end
