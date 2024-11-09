@@ -1,12 +1,33 @@
 require 'rake/clean'
 require 'csv'
 require_relative "./lib/ledger/preproc"
+require_relative "./lib/ledger/expense"
 require_relative "./lib/ledger/expense_reader"
 require_relative "./lib/ledger/expenselist"
 
+desc 'report'
+task :report, [:month] => [:type_sum] do |igonre, args|
+end
+
 #usage: rake type_sum[9]
-desc 'total sum by expense type'
+desc '지출성격별 합계를 구한다'
 task :type_sum, [:month] do |ignore, args|
+  output_file = File.join(File.dirname(__FILE__), *%W[.. ledger dest report 2024_#{args[:month]}])
+  exp_types = %w[income saving fix_exp var_exp]
+
+  CSV.open(output_file, 'w') do |csv|
+    csv << ["총계"] << ["지출성격", "지출금액"]
+    exp_types.each do |exp_type|
+      src_path = File.join(File.dirname(__FILE__), *%W[.. ledger dest #{exp_type} #{"2024_#{args[:month]}"}])
+      er = Lgr::ExpenseReader.new
+      explist = Lgr::ExpenseList.new(er.read_expense_list(File.read(src_path)))
+      total = explist.compute_total_expense
+      pretty_total = Lgr::Expense.new("1/1,#{total},x").format_amount
+      csv << ["#{exp_type}","#{pretty_total}"]
+    end
+  end
+end
+
   file_nm = "2024_#{args[:month]}"
   csv = []
   %w[income saving fix_exp var_exp].each do |exp_type|

@@ -22,13 +22,20 @@ module Lgr
     end
 
     def format_amount
-      self.amount
+      amt = self.amount
           .to_s
-          .gsub(/\D/, '')
-          .reverse
-          .gsub(/.{3}/, '\0,')
-          .sub(/,$/, '')
-          .reverse
+
+      if amt[0] == "-"
+        is_minus = true
+        amt = amt[1..-1]
+      end
+
+      amt.gsub(/\D/, '')
+         .reverse
+         .gsub(/.{3}/, '\0,')
+         .sub(/,$/, '')
+         .reverse
+         .prepend(is_minus ? "-" : "")
     end
 
     def unformat_amount amount
