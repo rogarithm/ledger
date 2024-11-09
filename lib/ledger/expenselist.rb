@@ -38,14 +38,16 @@ module Lgr
   end
 
   module Filterable
-    def in_category category
-      filtered_expenses = self.select {|expense| expense.category != nil and expense.category.start_with?(category)}
+    def in_category cat
+      exps_in_cat = self.select do |exp|
+        exp.category != nil and exp.category.start_with?(cat)
+      end
 
-      if filtered_expenses.empty?
+      if exps_in_cat.empty?
         return "no expense for given category!"
       end
 
-      Lgr::ExpenseList.from_exps(filtered_expenses)
+      Lgr::ExpenseList.from_exps(exps_in_cat)
     end
 
     def list_in_range from, to
@@ -54,40 +56,40 @@ module Lgr
       to_month, to_day = to.split("/")
       to = Time.new(2024, to_month.to_i, to_day.to_i)
 
-      expenses_in_range = self.select {|expense| expense.at >= from and expense.at <= to}
+      exps_in_range = self.select {|exp| exp.at >= from and exp.at <= to}
 
-      if expenses_in_range.empty?
+      if exps_in_range.empty?
         return "no matching expense for given range!"
       end
 
-      Lgr::ExpenseList.from_exps(expenses_in_range)
+      Lgr::ExpenseList.from_exps(exps_in_range)
     end
 
     def sort_by_amt(order: :desc, len: self.size)
-      sorted = self.sort_by { |exp| exp.amount }
-                   .reverse!
-                   .take(len)
-      Lgr::ExpenseList.from_exps(sorted)
+      sorted_exps = self.sort_by { |exp| exp.amount }
+                        .reverse!
+                        .take(len)
+      Lgr::ExpenseList.from_exps(sorted_exps)
     end
 
     def eg_than_amount amount
-      filtered_expenses = self.select {|expense| expense.amount >= amount}
+      filtered_exps = self.select {|exp| exp.amount >= amount}
 
-      if filtered_expenses.empty?
+      if filtered_exps.empty?
         return "no expense that has higher or equal amount for given amount!"
       end
 
-      Lgr::ExpenseList.from_exps(filtered_expenses)
+      Lgr::ExpenseList.from_exps(filtered_exps)
     end
 
     def le_than_amount amount
-      filtered_expenses = self.select {|expense| expense.amount <= amount}
+      filtered_exps = self.select {|exp| exp.amount <= amount}
 
-      if filtered_expenses.empty?
+      if filtered_exps.empty?
         return "no expense that has less or equal amount for given amount!"
       end
 
-      Lgr::ExpenseList.from_exps(filtered_expenses)
+      Lgr::ExpenseList.from_exps(filtered_exps)
     end
   end
 
@@ -95,9 +97,9 @@ module Lgr
     include Filterable
     include Reportable
 
-    def initialize(exp_list)
+    def initialize(plain_exp_list)
       super(
-        exp_list.inject([]) do |res, exp|
+        plain_exp_list.inject([]) do |res, exp|
           res << Lgr::Expense.new(exp)
         end
       )
