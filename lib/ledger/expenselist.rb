@@ -10,22 +10,22 @@ module Lgr
       self.compute_total_expense
     end
 
-    def report_by_cat category
-      max_expense = self.max {|e1, e2| e1.amount.to_s.size <=> e2.amount.to_s.size}
-      max_size = max_expense.amount.to_s.size
+    def report_by_cat cat
+      max_exp = self.max {|e1, e2| e1.amount.to_s.size <=> e2.amount.to_s.size}
+      max_size = max_exp.amount.to_s.size
 
-      result = [category]
-      self.each do |expense|
-        dots_to_pad = '.' * (max_size - expense.amount.to_s.size)
-        result << "#{expense.at.strftime "%m/%d"}...#{dots_to_pad}#{expense.format_amount}"
+      result = [cat]
+      self.each do |exp|
+        dots_to_pad = '.' * (max_size - exp.amount.to_s.size)
+        result << "#{exp.at.strftime "%m/%d"}...#{dots_to_pad}#{exp.format_amount}"
       end
       result.join("\n")
     end
 
-    def category_list
+    def cat_list
       result = []
-      self.inject(result) do |category_list, expense|
-        category_list << expense.category
+      self.inject(result) do |cat_list, exp|
+        cat_list << exp.category
       end
       result.select! {|e| e != ""}
       uniq_result = result.uniq
@@ -38,7 +38,7 @@ module Lgr
   end
 
   module Filterable
-    def in_category cat
+    def in_cat cat
       exps_in_cat = self.select do |exp|
         exp.category != nil and exp.category.start_with?(cat)
       end

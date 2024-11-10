@@ -45,7 +45,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ["4/4,1,v", "4/6,2,c", "4/6,4,c"]
       )
 
-      expect(exp_list.in_category("c")).to eq_expenses(
+      expect(exp_list.in_cat("c")).to eq_expenses(
         [Lgr::Expense.new("4/6,2,c"), Lgr::Expense.new("4/6,4,c")]
       )
     end
@@ -90,7 +90,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ]
       )
 
-      expect(expense_list.category_list).to eq(
+      expect(expense_list.cat_list).to eq(
         ["living", "meal", "coffee", "medicine", "book", "shoe"]
       )
     end
@@ -104,7 +104,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ]
       )
 
-      expect(expense_list.category_list).to eq(
+      expect(expense_list.cat_list).to eq(
         ["meal", "cof"]
       )
     end
