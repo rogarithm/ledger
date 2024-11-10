@@ -6,8 +6,14 @@ module Lgr
       self.inject(0) {|sum, expense| sum += expense.amount}
     end
 
-    def sum_by_cat
-      self.compute_total_expense
+    def sum_by_cat cat
+      Lgr::ExpenseList.from_exps(self.select {|exp| exp.category == cat})
+                      .compute_total_expense
+    end
+
+    def sum_by_cat_n_detail cat, detail
+      Lgr::ExpenseList.from_exps(self.select {|exp| exp.category == cat and exp.detail == detail})
+                      .compute_total_expense
     end
 
     def report_by_cat cat
@@ -20,6 +26,21 @@ module Lgr
         result << "#{exp.at.strftime "%m/%d"}...#{dots_to_pad}#{exp.format_amount}"
       end
       result.join("\n")
+    end
+
+    def report_by_cat_n_detail cat_n_detail
+      cnd_info = []
+      cnd = cat_n_detail
+      cnd.keys.each do |cat|
+        cnd_info << [cat, '', self.sum_by_cat(cat)]
+        no_cat_sum = self.sum_by_cat_n_detail(cat, nil)
+        cnd_info << ['', '상세항목 없음', no_cat_sum] if no_cat_sum != 0
+        details = cnd.values[0]
+        details.each do |detail|
+          cnd_info << ['', detail.to_s, self.sum_by_cat_n_detail(cat, detail.to_s)]
+        end
+      end
+      cnd_info
     end
 
     def cat_list

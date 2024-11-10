@@ -58,6 +58,25 @@ task :cat_list, [:month] do |ignore, args|
   end
 end
 
+desc '지출 카테고리 및 상세 항목별 합계를 구한다'
+task :cat_n_detail_sum, [:month] do |ignore, args|
+  file_nm = "2024_#{args[:month]}"
+  output_file = File.join(File.dirname(__FILE__), *%W[.. ledger dest report #{file_nm}_cnd.csv])
+  exp_types = %w[fix_exp income saving var_exp]
+
+  CSV.open(output_file, 'w') do |csv|
+    exp_types.each do |exp_type|
+      src_path = File.join(File.dirname(__FILE__), *%W[.. ledger dest #{exp_type} #{file_nm}])
+      er = Lgr::ExpenseReader.new
+      explist = Lgr::ExpenseList.new(er.read_expense_list(File.read(src_path)))
+      explist.make_cat_n_detail.each do |cnd|
+        explist.report_by_cat_n_detail(cnd).each do |summary|
+          csv << summary
+        end
+      end
+    end
+  end
+end
 end
 
 desc 'sum by big categories'
