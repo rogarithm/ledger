@@ -32,6 +32,23 @@ module Lgr
       uniq_result
     end
 
+    def details_of_cat cat
+      self.select {|exp| exp.category == cat}
+          .reject {|exp| exp.detail == nil}
+          .map {|exp| exp.detail.to_sym}
+          .uniq
+    end
+
+    def make_cat_n_detail
+      result = []
+      self.cat_list.map do |cat|
+        cnd = {}
+        cnd[cat] = self.details_of_cat(cat)
+        result << cnd
+      end
+      result
+    end
+
     def print_report
       self.map(&:to_s).join("\n")
     end

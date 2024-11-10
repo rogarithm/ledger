@@ -28,15 +28,36 @@ task :type_sum, [:month] do |ignore, args|
   end
 end
 
+desc '해당 월의 카테고리 및 상세 항목의 목록을 가져온다'
+task :cat_list, [:month] do |ignore, args|
   file_nm = "2024_#{args[:month]}"
-  csv = []
-  %w[income saving fix_exp var_exp].each do |exp_type|
+  all_cats = ""
+  dest_path = File.join(File.dirname(__FILE__), *%W[.. ledger dest cat #{file_nm}_raw])
+  %w[fix_exp income saving var_exp].each do |exp_type|
     src_path = File.join(File.dirname(__FILE__), *%W[.. ledger dest #{exp_type} #{file_nm}])
     er = Lgr::ExpenseReader.new
     explist = Lgr::ExpenseList.new(er.read_expense_list(File.read(src_path)))
-    csv << "#{exp_type}, #{explist.compute_total_expense}"
+
+    all_cats << "#{exp_type}\n"
+    explist.make_cat_n_detail.each do |cnd|
+      cnd.keys.each do |cat|
+        if cnd[cat] == []
+          all_cats << " #{cat}\n"
+        else
+          details = cnd[cat].join(", ")
+          all_cats << " #{cat}\n"
+          all_cats << "  #{details}\n"
+        end
+      end
+    end
   end
-  puts csv.join("\n")
+
+  FileUtils.touch(dest_path) if File.exist?(dest_path) == false
+  File.open(File.join(dest_path), "w") do |f|
+    f.write(all_cats)
+  end
+end
+
 end
 
 desc 'sum by big categories'
