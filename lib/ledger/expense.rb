@@ -5,8 +5,10 @@ module Lgr
     def initialize(data)
       at, amount, category, account = data.split(",").map! {|x| x.strip}
       category, detail = category.split(".").map! {|x| x.strip}
-      month, day = at.split("/")
-      @at = Time.new(Time.new.year, month, day)
+      month, dayish = at.split("/")
+      day, time = dayish.split(" ")
+      hour, min, sec = time.nil? ? [0,0,0] : time.split(":")
+      @at = Time.new(Time.new.year, month, day, hour, min, sec)
       @amount = amount.to_i
       @category = category
       @detail = detail

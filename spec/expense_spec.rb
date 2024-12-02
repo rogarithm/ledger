@@ -26,6 +26,20 @@ RSpec.describe Lgr::Expense, "expense" do
     ))
   end
 
+  it "지출에 시간 정보가 없을 경우, 기본값을 할당한다" do
+    exp = Lgr::Expense.new("4/2,4,b.m,acc")
+    expect(exp.at.hour).to eq(0)
+    expect(exp.at.min).to eq(0)
+    expect(exp.at.sec).to eq(0)
+  end
+
+  it "지출은 시간 정보를 가질 수 있다" do
+    exp = Lgr::Expense.new("4/2 12:01:29,4,b.m,acc")
+    expect(exp.at.hour).to eq(12)
+    expect(exp.at.min).to eq(1)
+    expect(exp.at.sec).to eq(29)
+  end
+
   it "지출액을 포맷팅할 수 있다" do
     e1 = Lgr::Expense.new("4/2,500,c")
     expect(e1.format_amount).to eq("500")
