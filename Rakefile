@@ -77,7 +77,6 @@ task :cat_n_detail_sum, [:month] do |ignore, args|
     end
   end
 end
-end
 
 desc 'sum by big categories'
 task :cat_sum, [:month] do |ignore, args|
