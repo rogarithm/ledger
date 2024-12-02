@@ -41,7 +41,9 @@ module Lgr
           exp_type = l.strip.to_sym
           groups[exp_type] ||= {}
         when from_csv
-          date, exp = l.split(",")[0].strip, l.split(",")[1..-1].join(",").strip
+          dateish, exp = l.split(",")[0].strip, l.split(",")[1..-1].join(",").strip
+          date, time = dateish.split(" ")
+          exp = time << "," << exp if time
           groups[exp_type][date] ||= []
           exp = acc == "" ? exp : exp << "," << acc
           groups[exp_type][date] << exp
