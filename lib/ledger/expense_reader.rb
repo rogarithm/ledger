@@ -2,33 +2,33 @@ require_relative "./expense"
 
 module Lgr
   class ExpenseReader
-    def read_expense_list(raw_expenses)
-      expenses = []
+    def read_expense_list(raw_exps)
+      exps = []
       current_date = ''
 
-      raw_expenses.split("\n").each do |line|
+      raw_exps.split("\n").each do |line|
         if line =~ /^\s*\d+\/\d+$/
           current_date = line.strip
         elsif line =~ /^$/
           next
         else
-          expense = current_date.strip + "," + line.split(",").map(&:strip).join(",")
-          expenses << expense
+          exp = current_date.strip + "," + line.split(",").map(&:strip).join(",")
+          exps << exp
         end
       end
 
-      expenses
+      exps
     end
 
-    def back_to_db_form(expenses)
+    def back_to_db_form(exps)
       result = ""
-      expenses.group_by { |expense| expense.at }.transform_values do |expense_group|
-        result += "#{expense_group[0].at.strftime("%m/%d").sub(/^0/,'').sub(/\/0/,'/')}\n"
-        expense_group.each do |expense|
-          if expense.detail != nil
-            result += "#{expense.amount},#{expense.category}.#{expense.detail}\n"
+      exps.group_by { |exp| exp.at }.transform_values do |exp_group|
+        result += "#{exp_group[0].at.strftime("%m/%d").sub(/^0/,'').sub(/\/0/,'/')}\n"
+        exp_group.each do |exp|
+          if exp.detail != nil
+            result += "#{exp.amount},#{exp.category}.#{exp.detail}\n"
           else
-            result += "#{expense.amount},#{expense.category}\n"
+            result += "#{exp.amount},#{exp.category}\n"
           end
         end
       end

@@ -45,8 +45,36 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ["4/4,1,v", "4/6,2,c", "4/6,4,c"]
       )
 
-      expect(exp_list.in_category("c")).to eq_expenses(
+      expect(exp_list.in_cat("c")).to eq_expenses(
         [Lgr::Expense.new("4/6,2,c"), Lgr::Expense.new("4/6,4,c")]
+      )
+    end
+
+    it "특정 카테고리의 상세 항목을 가져올 수 있다" do
+      exp_list = Lgr::ExpenseList.new(
+        ["4/4,1,c.d1", "4/6,2,c.d2", "4/6,4,c"]
+      )
+
+      expect(exp_list.details_of_cat("c")).to eq(
+        [:d1, :d2]
+      )
+    end
+
+    it "지출 리스트 내 카테고리와 상세 항목 정보를 취합할 수 있다" do
+      exp_list = Lgr::ExpenseList.new([
+        "4/4,1,c.d1", "4/6,2,c.d2", "4/6,4,c", "4/4,1,x.y1", "4/4,1,x.y2", "4/4,1,x.y3"
+      ])
+
+      expect(exp_list.make_cat_n_detail).to eq(
+        [{"c" => [:d1, :d2]}, {"x" => [:y1, :y2, :y3]}]
+      )
+
+      exp_list = Lgr::ExpenseList.new(
+        ["4/4,1,c.d1", "4/6,2,c.d1"]
+      )
+
+      expect(exp_list.make_cat_n_detail).to eq(
+        [{"c" => [:d1]}]
       )
     end
   end
@@ -90,7 +118,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ]
       )
 
-      expect(expense_list.category_list).to eq(
+      expect(expense_list.cat_list).to eq(
         ["living", "meal", "coffee", "medicine", "book", "shoe"]
       )
     end
@@ -104,7 +132,7 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         ]
       )
 
-      expect(expense_list.category_list).to eq(
+      expect(expense_list.cat_list).to eq(
         ["meal", "cof"]
       )
     end
@@ -124,6 +152,38 @@ RSpec.describe Lgr::ExpenseList, "expense list" do
         expense_list.sort_by_amt.collect {|exp| exp.amount}
       ).to eq(
         [18, 11, 10, 9, 4]
+      )
+    end
+
+    it "지출 리스트 내 카테고리와 상세 항목별 합계 정보를 연산할 수 있다" do
+      exps1 = Lgr::ExpenseList.new([
+        "4/4,1,c.d1", "4/6,2,c.d1"
+      ])
+
+      report1 = []
+      exps1.make_cat_n_detail.each do |cnd|
+        report1 << exps1.report_by_cat_n_detail(cnd)
+      end
+      expect(report1).to eq(
+        [
+          [["c", "", 3], ["", "d1", 3]]
+        ]
+      )
+
+      exps2 = Lgr::ExpenseList.new([
+        "4/4,1,c.d1", "4/6,2,c.d2", "4/6,4,c",
+        "4/4,1,x.y1", "4/4,3,x.y1", "4/4,1,x.y2"
+      ])
+
+      report2 = []
+      exps2.make_cat_n_detail.each do |cnd|
+        report2 << exps2.report_by_cat_n_detail(cnd)
+      end
+      expect(report2).to eq(
+        [
+          [["c", "", 7], ["", "상세항목 없음", 4], ["", "d1", 1], ["", "d2", 2]],
+          [["x", "", 5], ["", "y1", 4], ["", "y2", 1]]
+        ]
       )
     end
   end

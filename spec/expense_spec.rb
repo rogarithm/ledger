@@ -35,6 +35,9 @@ RSpec.describe Lgr::Expense, "expense" do
 
     e3 = Lgr::Expense.new("4/2,120800,c")
     expect(e3.format_amount).to eq("120,800")
+
+    e4 = Lgr::Expense.new("4/2,-1000,c")
+    expect(e4.format_amount).to eq("-1,000")
   end
 
   it "지출액 포맷팅을 되돌릴 수 있다" do

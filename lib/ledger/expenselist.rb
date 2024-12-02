@@ -6,30 +6,68 @@ module Lgr
       self.inject(0) {|sum, expense| sum += expense.amount}
     end
 
-    def sum_by_cat
-      self.compute_total_expense
+    def sum_by_cat cat
+      Lgr::ExpenseList.from_exps(self.select {|exp| exp.category == cat})
+                      .compute_total_expense
     end
 
-    def report_by_cat category
-      max_expense = self.max {|e1, e2| e1.amount.to_s.size <=> e2.amount.to_s.size}
-      max_size = max_expense.amount.to_s.size
+    def sum_by_cat_n_detail cat, detail
+      Lgr::ExpenseList.from_exps(self.select {|exp| exp.category == cat and exp.detail == detail})
+                      .compute_total_expense
+    end
 
-      result = [category]
-      self.each do |expense|
-        dots_to_pad = '.' * (max_size - expense.amount.to_s.size)
-        result << "#{expense.at.strftime "%m/%d"}...#{dots_to_pad}#{expense.format_amount}"
+    def report_by_cat cat
+      max_exp = self.max {|e1, e2| e1.amount.to_s.size <=> e2.amount.to_s.size}
+      max_size = max_exp.amount.to_s.size
+
+      result = [cat]
+      self.each do |exp|
+        dots_to_pad = '.' * (max_size - exp.amount.to_s.size)
+        result << "#{exp.at.strftime "%m/%d"}...#{dots_to_pad}#{exp.format_amount}"
       end
       result.join("\n")
     end
 
-    def category_list
+    def report_by_cat_n_detail cat_n_detail
+      cnd_info = []
+      cnd = cat_n_detail
+      cnd.keys.each do |cat|
+        cnd_info << [cat, '', self.sum_by_cat(cat)]
+        no_cat_sum = self.sum_by_cat_n_detail(cat, nil)
+        cnd_info << ['', '상세항목 없음', no_cat_sum] if no_cat_sum != 0
+        details = cnd.values[0]
+        details.each do |detail|
+          cnd_info << ['', detail.to_s, self.sum_by_cat_n_detail(cat, detail.to_s)]
+        end
+      end
+      cnd_info
+    end
+
+    def cat_list
       result = []
-      self.inject(result) do |category_list, expense|
-        category_list << expense.category
+      self.inject(result) do |cat_list, exp|
+        cat_list << exp.category
       end
       result.select! {|e| e != ""}
       uniq_result = result.uniq
       uniq_result
+    end
+
+    def details_of_cat cat
+      self.select {|exp| exp.category == cat}
+          .reject {|exp| exp.detail == nil}
+          .map {|exp| exp.detail.to_sym}
+          .uniq
+    end
+
+    def make_cat_n_detail
+      result = []
+      self.cat_list.map do |cat|
+        cnd = {}
+        cnd[cat] = self.details_of_cat(cat)
+        result << cnd
+      end
+      result
     end
 
     def print_report
@@ -38,14 +76,16 @@ module Lgr
   end
 
   module Filterable
-    def in_category category
-      filtered_expenses = self.select {|expense| expense.category != nil and expense.category.start_with?(category)}
+    def in_cat cat
+      exps_in_cat = self.select do |exp|
+        exp.category != nil and exp.category.start_with?(cat)
+      end
 
-      if filtered_expenses.empty?
+      if exps_in_cat.empty?
         return "no expense for given category!"
       end
 
-      Lgr::ExpenseList.from_exps(filtered_expenses)
+      Lgr::ExpenseList.from_exps(exps_in_cat)
     end
 
     def list_in_range from, to
@@ -54,40 +94,40 @@ module Lgr
       to_month, to_day = to.split("/")
       to = Time.new(2024, to_month.to_i, to_day.to_i)
 
-      expenses_in_range = self.select {|expense| expense.at >= from and expense.at <= to}
+      exps_in_range = self.select {|exp| exp.at >= from and exp.at <= to}
 
-      if expenses_in_range.empty?
+      if exps_in_range.empty?
         return "no matching expense for given range!"
       end
 
-      Lgr::ExpenseList.from_exps(expenses_in_range)
+      Lgr::ExpenseList.from_exps(exps_in_range)
     end
 
     def sort_by_amt(order: :desc, len: self.size)
-      sorted = self.sort_by { |exp| exp.amount }
-                   .reverse!
-                   .take(len)
-      Lgr::ExpenseList.from_exps(sorted)
+      sorted_exps = self.sort_by { |exp| exp.amount }
+                        .reverse!
+                        .take(len)
+      Lgr::ExpenseList.from_exps(sorted_exps)
     end
 
     def eg_than_amount amount
-      filtered_expenses = self.select {|expense| expense.amount >= amount}
+      filtered_exps = self.select {|exp| exp.amount >= amount}
 
-      if filtered_expenses.empty?
+      if filtered_exps.empty?
         return "no expense that has higher or equal amount for given amount!"
       end
 
-      Lgr::ExpenseList.from_exps(filtered_expenses)
+      Lgr::ExpenseList.from_exps(filtered_exps)
     end
 
     def le_than_amount amount
-      filtered_expenses = self.select {|expense| expense.amount <= amount}
+      filtered_exps = self.select {|exp| exp.amount <= amount}
 
-      if filtered_expenses.empty?
+      if filtered_exps.empty?
         return "no expense that has less or equal amount for given amount!"
       end
 
-      Lgr::ExpenseList.from_exps(filtered_expenses)
+      Lgr::ExpenseList.from_exps(filtered_exps)
     end
   end
 
@@ -95,9 +135,9 @@ module Lgr
     include Filterable
     include Reportable
 
-    def initialize(exp_list)
+    def initialize(plain_exp_list)
       super(
-        exp_list.inject([]) do |res, exp|
+        plain_exp_list.inject([]) do |res, exp|
           res << Lgr::Expense.new(exp)
         end
       )
