@@ -28,7 +28,7 @@ describe Lgr::Preproc do
     mid_res_sp = {:fix_exp => {"8/5" => ["7,x,shinhan"], "8/26" => ["3,d,kakao"]}}
     expect(@pp.group_by_exp_type(File.read(src_path_sp), from_csv: true)).to eq(mid_res_sp)
 
-    res_path_sp = File.join(TEST_DATA_DIR, *%w[after group_with_acc_simple])
+    res_path_sp = File.join(TEST_DATA_DIR, *%w[after group_with_date_simple])
     expected_sp = File.read(res_path_sp)
     expect(@pp.back2ledger_form(mid_res_sp)).to eq_ignore_ws(expected_sp)
 
