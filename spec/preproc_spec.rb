@@ -25,7 +25,7 @@ describe Lgr::Preproc do
   it "지출 성격과 날짜를 기준으로 지출 내역을 모은다. 지출 내역에 계좌 정보와 날짜를 포함한다" do
     src_path_sp = File.join(TEST_DATA_DIR, *%w[before group_with_date_simple])
 
-    mid_res_sp = {:fix_exp => {"8/5" => ["7,x,shinhan"], "8/26" => ["3,d,kakao"]}}
+    mid_res_sp = {:fix_exp => {"8/5" => ["7,x,shinhan"], "8/26" => ["12:20:13,3,d,kakao"]}}
     expect(@pp.group_by_exp_type(File.read(src_path_sp), from_csv: true)).to eq(mid_res_sp)
 
     res_path_sp = File.join(TEST_DATA_DIR, *%w[after group_with_acc_simple])
@@ -43,7 +43,7 @@ describe Lgr::Preproc do
   it "지출 성격과 날짜를 기준으로 지출 내역을 모은다. 지출 내역에 계좌 정보를 포함한다" do
     src_path_sp = File.join(TEST_DATA_DIR, *%w[before group_with_acc_simple])
 
-    mid_res_sp = {:fix_exp => {"8/5" => ["7,x,shinhan"], "8/26" => ["3,d,kakao"]}}
+    mid_res_sp = {:fix_exp => {"8/5" => ["7,x,shinhan"], "8/26" => ["12:20:13,3,d,kakao"]}}
     expect(@pp.group_by_exp_type(File.read(src_path_sp))).to eq(mid_res_sp)
 
     res_path_sp = File.join(TEST_DATA_DIR, *%w[after group_with_acc_simple])
