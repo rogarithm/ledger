@@ -8,6 +8,13 @@ RSpec.describe Lgr::Expense, "expense" do
     config.example_status_persistence_file_path = 'spec/pass_fail_history'
   end
 
+  it "시분초 정보를 갖는 지출 객체를 만들 수 있다" do
+    at1 = Lgr::Expense.new("10/01 17:05:14,-5,x,a1").at
+    expect([at1.hour, at1.min, at1.sec]).to eq([17, 5, 14])
+    at2 = Lgr::Expense.new("10/03 00:47:05,5,y,a2").at
+    expect([at2.hour, at2.min, at2.sec]).to eq([0, 47, 5])
+  end
+
   it "지출의 category와 detail을 분리해서 저장할 수 있다" do
     expect(Lgr::Expense.new("4/2,4,b.m")).to eq_expense(Lgr::Expense.from(
       "4/2","4","b","m"

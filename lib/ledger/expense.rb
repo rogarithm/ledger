@@ -5,8 +5,15 @@ module Lgr
     def initialize(data)
       at, amount, category, account = data.split(",").map! {|x| x.strip}
       category, detail = category.split(".").map! {|x| x.strip}
-      month, day = at.split("/")
-      @at = Time.new(Time.new.year, month, day)
+      if at.split(" ").size == 2
+        md, time = at.split(" ")
+        month, day = md.split("/")
+        h, m, s = time.split(":")
+      else
+        month, day = at.split("/")
+        h, m, s = 0, 0, 0
+      end
+      @at = Time.new(Time.new.year, month, day, h, m, s)
       @amount = amount.to_i
       @category = category
       @detail = detail
