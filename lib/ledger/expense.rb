@@ -6,14 +6,14 @@ module Lgr
       at, amount, category, account = data.split(",").map! {|x| x.strip}
       category, detail = category.split(".").map! {|x| x.strip}
       if at.split(" ").size == 2
-        md, time = at.split(" ")
-        month, day = md.split("/")
-        h, m, s = time.split(":")
+        month_n_day, time = at.split(" ")
+        month, day = month_n_day.split("/")
+        hour, min, sec = time.split(":")
       else
         month, day = at.split("/")
-        h, m, s = 0, 0, 0
+        hour, min, sec = 0, 0, 0
       end
-      @at = Time.new(Time.new.year, month, day, h, m, s)
+      @at = Time.new(Time.new.year, month, day, hour, min, sec)
       @amount = amount.to_i
       @category = category
       @detail = detail
