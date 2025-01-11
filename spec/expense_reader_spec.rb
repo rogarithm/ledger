@@ -36,16 +36,16 @@ RSpec.describe Lgr::ExpenseReader, "reads expense list" do
   it "일반 텍스트 포맷 가계부로부터 지출 정보를 가져올 수 있다" do
     raw_expense_list = <<-file_content
     4/2
-    4,b,m
-    1,v,ns
+    12:13:00,4,b,m
+    07:13:00,1,v,ns
     1,c
     file_content
 
     reader = Lgr::ExpenseReader.new
     expense_list = reader.read_expense_list(raw_expense_list)
 
-    expect(expense_list[0]).to eq("4/2,4,b,m")
-    expect(expense_list[1]).to eq("4/2,1,v,ns")
+    expect(expense_list[0]).to eq("4/2 12:13:00,4,b,m")
+    expect(expense_list[1]).to eq("4/2 07:13:00,1,v,ns")
     expect(expense_list[2]).to eq("4/2,1,c")
   end
 

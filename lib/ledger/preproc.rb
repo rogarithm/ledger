@@ -42,8 +42,10 @@ module Lgr
           groups[exp_type] ||= {}
         when from_csv
           date, exp = l.split(",")[0].strip, l.split(",")[1..-1].join(",").strip
+          date, time = date.split(" ")
           groups[exp_type][date] ||= []
           exp = acc == "" ? exp : exp << "," << acc
+          exp = "#{time},#{exp}" if time
           groups[exp_type][date] << exp
         when date?(l) then
           date = l.strip

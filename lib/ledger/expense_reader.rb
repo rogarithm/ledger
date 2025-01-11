@@ -12,7 +12,11 @@ module Lgr
         elsif line =~ /^$/
           next
         else
-          exp = current_date.strip + "," + line.split(",").map(&:strip).join(",")
+          if line.split(",").size < 4 # 지출 내역이 시:분:초를 포함하지 않는다
+            exp = current_date.strip + "," + line.split(",").map(&:strip).join(",")
+          elsif line.split(",")[0] =~ /\s*\d\d:\d\d:\d\d/ # 지출 내역이 시:분:초를 포함한다
+            exp = current_date.strip << " " << line.split(",")[0].strip << "," + line.split(",")[1..-1].map(&:strip).join(",")
+          end
           exps << exp
         end
       end
